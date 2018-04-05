@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Shelby Lee</title>
+    <link>https://shelbylee.github.io/</link>
+    <description>Recent content on Shelby Lee</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2018. All rights reserved.</copyright>
+    <lastBuildDate>Thu, 05 Apr 2018 14:50:13 +0800</lastBuildDate>
+    
+	<atom:link href="https://shelbylee.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Java Collections Framework学习笔记之HashMap</title>
+      <link>https://shelbylee.github.io/post/2018/04/05/</link>
+      <pubDate>Thu, 05 Apr 2018 14:50:13 +0800</pubDate>
+      
+      <guid>https://shelbylee.github.io/post/2018/04/05/</guid>
+      <description>Java Collections Framework学习笔记之HashMap 一、HashMap简介 我们看一下官方文档中对HashMap的描述
+ * Hash table based implementation of the &amp;lt;tt&amp;gt;Map&amp;lt;/tt&amp;gt; interface. This * implementation provides all of the optional map operations, and permits * &amp;lt;tt&amp;gt;null&amp;lt;/tt&amp;gt; values and the &amp;lt;tt&amp;gt;null&amp;lt;/tt&amp;gt; key. (The &amp;lt;tt&amp;gt;HashMap&amp;lt;/tt&amp;gt; * class is roughly equivalent to &amp;lt;tt&amp;gt;Hashtable&amp;lt;/tt&amp;gt;, except that it is * unsynchronized and permits nulls.) This class makes no guarantees as to * the order of the map; in particular, it does not guarantee that the order * will remain constant over time.</description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>https://shelbylee.github.io/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://shelbylee.github.io/about/</guid>
+      <description> 关于作者 大三在读
+一个普普通通的女孩子
+喜欢东野圭吾
+喜欢海贼王
+喜欢银魂
+喜欢跑步
+喜欢健身
+经常思考人生
+喜欢狗
+喜欢猫
+喜欢野生动物
+以后想开个犬舍 or 种个田 or 当个野生动物管理员 or 建个流浪猫狗收养中心 or 赚够钱后当个包租婆
+最近喜欢一句话：不论你是谁，不论你做什么，当你渴望得到某种东西时，最终一定能够得到，因为这愿望来自宇宙的灵魂，那就是你在世间的使命。
+ Name: Shelby Lee. Spelled as Xibin Li (李习斌) in Mandarin. Location: Weihai, ShanDong, China E-mail: lixibin0829@gmail.com  </description>
+    </item>
+    
+    <item>
+      <title>Contact</title>
+      <link>https://shelbylee.github.io/contact/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://shelbylee.github.io/contact/</guid>
+      <description> E-mail: lixbin0829@gmail.com E-mail: lixibin0829@163.com WeChat: lixibin9194329  </description>
+    </item>
+    
+  </channel>
+</rss>
