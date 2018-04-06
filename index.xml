@@ -13,13 +13,17 @@
     
     
     <item>
-      <title>Java Collections Framework学习笔记之HashMap</title>
+      <title>个人博客</title>
       <link>https://shelbylee.github.io/post/2018/04/05/</link>
       <pubDate>Thu, 05 Apr 2018 14:50:13 +0800</pubDate>
       
       <guid>https://shelbylee.github.io/post/2018/04/05/</guid>
-      <description>Java Collections Framework学习笔记之HashMap 一、HashMap简介 我们看一下官方文档中对HashMap的描述
- * Hash table based implementation of the &amp;lt;tt&amp;gt;Map&amp;lt;/tt&amp;gt; interface. This * implementation provides all of the optional map operations, and permits * &amp;lt;tt&amp;gt;null&amp;lt;/tt&amp;gt; values and the &amp;lt;tt&amp;gt;null&amp;lt;/tt&amp;gt; key. (The &amp;lt;tt&amp;gt;HashMap&amp;lt;/tt&amp;gt; * class is roughly equivalent to &amp;lt;tt&amp;gt;Hashtable&amp;lt;/tt&amp;gt;, except that it is * unsynchronized and permits nulls.) This class makes no guarantees as to * the order of the map; in particular, it does not guarantee that the order * will remain constant over time.</description>
+      <description>个人博客 一个最简易的博客，暂时只关注内容。
+目前打算记录一些学习笔记和日常生活。
+尽量保证每篇博客逻辑清晰，内容有依有据。
+最后感慨一下
+岁月如梭啊，时间走的真的太快。
+素什锦年，稍纵即逝，珍惜。</description>
     </item>
     
     <item>
