@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.38" />
+
+  <title>线程安全性 &middot; Shelby Lee</title>
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
+
+  
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://shelbylee.github.io/css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://shelbylee.github.io/css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="https://shelbylee.github.io/css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+ 
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  <link rel="shortcut icon" href="https://shelbylee.github.io/img/favicon.ico" type="image/x-icon" />
+
+  
+  
+
+</head>
+
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="https://shelbylee.github.io/">Menu</a>
+
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/"><i class='fa fa-home fa-fw'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/post/"><i class='fa fa-list fa-fw'></i>Posts</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/about/"><i class='fa fa-user fa-fw'></i>About</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/contact/"><i class='fa fa-phone fa-fw'></i>Contact</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/topics/"><i class='fa fa-folder fa-fw'></i>Topics</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/tags/"><i class='fa fa-tags fa-fw'></i>Tags</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/shelbylee" target="_blank"><i class="fa fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small>&copy; 2018. All rights reserved.</small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>线程安全性</h1>
+  <h2></h2>
+</div>
+<div class="content">
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>07 Apr 2018, 22:14</time>
+  </div>
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-folder fa-fw"></i>
+    
+      <a class="post-taxonomy-topic" href="https://shelbylee.github.io/topics/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B">并发编程</a>
+    
+  </div>
+  
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-tags fa-fw"></i>
+    
+      <a class="post-taxonomy-tag" href="https://shelbylee.github.io/tags/2018-04">2018-04</a>
+    
+  </div>
+  
+  
+
+</div>
+
+  
+
+<p><img src="https://raw.githubusercontent.com/shelbylee/shelbylee.github.io/master/images/gintoki7.jpg" alt="image" /></p>
+
+<h2 id="线程安全性">线程安全性</h2>
+
+<p>本文是作者在阅读JCIP过程中的部分笔记和思考，纯手敲，如有误处，请指正，非常感谢~</p>
+
+<p>可能会有人对书中代码示例中的注解有疑问，这里说一下，JCIP中示例代码的注解都是自定义的，并非官方JDK的注解，因此如果想要在自己的代码中使用，需要添加依赖。移步：<a href="http://jcip.net/">jcip.net</a></p>
+
+<h3 id="一-什么是线程安全性">一、什么是线程安全性？</h3>
+
+<p>当多个线程访问某个类时，这个类始终都能表现出正确的行为，那么这个类就是线程安全的。</p>
+
+<p>示例：一个无状态的Servlet</p>
+
+<p>从request中获取数值，然后因数分解，最后将结果封装到response中</p>
+
+<pre><code class="language-java">    @ThreadSafe
+    public class StatelessFactorizer implements Servlet {
+        public void service(ServletRequest req, ServletResponse resp) {
+            BigInteger i = extractFromRequest(req);
+            BigInteger[] factors = factor(i);
+            encodeIntoResponse(resp, factors);
+        }
+    }
+</code></pre>
+
+<p>这是一个无状态的Servlet，什么是无状态的？不包含任何域或者对其他类的域的引用。service里仅仅是用到了存在线程栈上的局部变量的临时状态，并且只能由正在执行的线程访问。</p>
+
+<p>所以，如果有一个线程A正在访问StatelessFactorizer类，线程B也在访问StatelessFactorizer类，但是二者不会相互影响，最后的计算结果仍然是正确的，为什么呢？因为这两个线程并没有共享状态，他们各自访问的都是自己的局部变量，所以像这样 <strong>无状态的对象都是线程安全的</strong> 。</p>
+
+<p>大多数Servlet都是线程安全的，所以极大降低了在实现Servlet线程安全性的复杂性。只有在Servlet处理请求需要保存一些信息的情况下，线程安全性才会成为一个问题。</p>
+
+<h3 id="二-原子性">二、原子性</h3>
+
+<p>我理解的原子性就是指一个操作是最小范围的操作，这个操作要么完整的做要么不做，是一个不可分割的操作。比如一个简单的赋值语句 x = 1，就是一个原子操作，但是像复杂的运算符比如++, &ndash;这样的不是原子操作，因为这涉及到“读取-修改-写入”的一个操作序列，并且结果依赖于之前的状态。</p>
+
+<p>示例：在没有同步的情况下统计已处理请求数量的Servlet（非线程安全）</p>
+
+<pre><code class="language-java">    @NotThreadSafe
+    public class UnsafeCountingFactorizer implements Servlet {
+        private long count = 0;
+
+        public long getCount() {
+            return count;
+        }
+
+        public void service(ServletRequest req, ServletResponse resp) {
+            BigInteger i = extractFromRequest(req);
+            BigInteger[] factors = factor(i);
+            count++; // *1
+            encodeIntoResponse(resp, factors);
+        }
+    }
+</code></pre>
+
+<p>在上面这段代码中，count是一个公共的资源，如果有多个线程，比如线程A, B同时进入到 *1 这行，那么他们都读取到count = 0，然后进行自增，那么count就会变成1，很明显这不是我们想要的结果，因为我们丢失了一次自增。</p>
+
+<h4 id="1-竞态条件">1. 竞态条件</h4>
+
+<p>这里有一个概念：竞态条件（Race Condition），指的是，在并发编程中，由于不恰当的执行时序而出现不正确的结果。</p>
+
+<p>在count自增的这个计算过程中，他的正确性取决于线程交替执行的时序，那么就会发生竞态条件。</p>
+
+<p>大多数竞态条件的本质是，基于一种可能失效的观察结果来做出判断 or 执行某个计算，即“先检查后执行”。</p>
+
+<p>还是拿这个count自增的计算过程举例：
+- count++大致包含三步：
+    - 取当前count值 *1
+    - count加一 *2
+    - 写回count *3</p>
+
+<p>那么在这个过程中，线程A首先去获取当前count，然后很不幸，线程A被挂起了，线程B此时进入到 *1，他取得的count仍然为0，然后继续 *2，count = 1，现在线程B又被挂起了，线程A被唤醒继续 *2，此时线程A观察到的仍然是自己被挂起之前count = 0的结果，实际上是已经失效的结果，线程A再继续 *2，count = 1，然后 *3，最后得到结果是count = 1，然后线程B被唤醒后继续执行，得到的结果也是count = 1。</p>
+
+<p>这就是一个典型的由于不恰当的执行时序而产生不正确的结果的例子，即发生竞态条件。</p>
+
+<h4 id="2-延迟初始化中的竞态条件">2. 延迟初始化中的竞态条件</h4>
+
+<p>这是一个典型的懒汉式的单例模式的实现（非线程安全）</p>
+
+<pre><code class="language-java">    @NotThreadSafe
+    public class Singleton {
+        private static Singleton instance;
+
+        private Singleton() {}
+
+        public static Singleton getInstance() {
+            if (instance == null) { // *1
+                instance = new Singleton();
+            }
+
+            return instance;
+        }
+    }
+</code></pre>
+
+<p>在 *1 判空后，即实际需要使用时才初始化对象，也就是延迟初始化。这种方式首先判断 instance 是否已经被初始化，如果已经初始化过则返回现有的instance，否则再创建新的instance，然后再返回，这样就可以避免在后来的调用中执行这段高开销的代码路径。</p>
+
+<p>在这段代码中包含一个竞态条件，可能会破坏该类的正确性。假设有两个线程A, B，同时进入到了getInstance()方法，线程A在 *1 判断为true，然后开始创建Singleton实例，但是A会花费多久能创建完，以及线程的调度方式都是不确定的，所以有可能A还没创建完实例，B已经判空返回true，最终结果就是创建了两个实例对象，没有达到单例模式想要达到的效果。</p>
+
+<p>当然，单例模式有很多其他经典的线程安全的实现方式，像DCL、静态内部类、枚举都可以保证线程安全，在这里就不赘述了。</p>
+
+<h3 id="三-加锁机制">三、加锁机制</h3>
+
+<p>还是回到因数分解那个例子，如果希望提升Servlet的性能，将刚计算的结果缓存起来，当两个连续的请求对相同的值进行因数分解时，可以直接用上一次的结果，无需重新计算。</p>
+
+<p>具体实现如下：</p>
+
+<p>该Servlet在没有足够原子性保证的情况下对其最近计算结果进行缓存（非线程安全）</p>
+
+<pre><code class="language-java">@NotThreadSafe
+public class UnsafeCachingFactorizer implements Servlet {
+    private final AtomicReference&lt;BigInteger&gt; lastNumber
+            = new AtomicReference&lt;&gt;();
+    private final AtomicReference&lt;BigInteger[]&gt; lastFactors
+            = new AtomicReference&lt;&gt;();
+
+    public void service (ServletRequest req, ServletResponse resp) {
+        BigInteger i = extractFromRequest(req);
+        if (i.equals(lastNumber.get())) // *2
+            encodeIntoResponse(resp, lastFactors.get()); // *3
+        else {
+            BigInteger[] factors = factor(i);
+            lastNumber.set(i); // *1
+            lastFactors.set(factors);
+            encodeIntoResponse(resp, factors);
+        }
+    }
+}
+</code></pre>
+
+<p>很明显这个Servlet不是线程安全的，尽管使用了AtomicReference（替代对象引用的线程安全类）来保证每个操作的原子性，但是整个过程仍然存在竞态条件，我们无法同时更新lastNumber和lastFactors，比如线程A执行到 *1之后set了新的lastNumber，但此时还没有更新lastFactors，然后线程B进入到了 *2，发现已经该数字已经有缓存，便进入 *3，但此时线程A并没有同时更新lastFactors，所以线程B现在get的i的因数分解结果是错误的。</p>
+
+<p>Java提供了一些锁的机制来解决这样的问题。</p>
+
+<h4 id="1-内置锁">1. 内置锁</h4>
+
+<pre><code class="language-java">synchronized (lock) {
+    // 访问或修改由锁保护的共享状态
+}
+</code></pre>
+
+<p>在Java中，最基本的互斥同步手段就是synchronized关键字了</p>
+
+<p>比如，我们对一个计数操作进行同步</p>
+
+<pre><code class="language-java">public class Test implements Runnable {
+    private static int count;
+
+    public Test() {
+        count = 0;
+    }
+
+    @Override
+    public void run() {
+        synchronized (this) {
+            for (int i = 0; i &lt; 5; i++) {
+                try {
+                    System.out.println(Thread.currentThread().getName() + &quot;:&quot; + (count++));
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public static void main(String[] args) {
+        Test test = new Test();
+        Thread thread1 = new Thread(test, &quot;thread1&quot;);
+        Thread thread2 = new Thread(test, &quot;thread2&quot;);
+        thread1.start();
+        thread2.start();
+    }
+
+}
+</code></pre>
+
+<p>最后输出的结果是：</p>
+
+<pre><code>thread1:0
+thread1:1
+thread1:2
+thread1:3
+thread1:4
+thread2:5
+thread2:6
+thread2:7
+thread2:8
+thread2:9
+</code></pre>
+
+<p>synchronized关键字编译后会在同步块前后形成 monitorenter 和 monitorexit 这两个字节码指令</p>
+
+<pre><code class="language-java">  public void run();
+    Code:
+       0: aload_0
+       1: dup
+       2: astore_1
+       3: monitorenter
+       4: iconst_0
+       5: istore_2
+       6: iload_2
+        // ......
+      67: iinc          2, 1
+      70: goto          6
+      73: aload_1
+      74: monitorexit
+      75: goto          85
+      78: astore        4
+      80: aload_1
+      81: monitorexit
+      82: aload         4
+      84: athrow
+      85: return
+</code></pre>
+
+<p>在执行monitorenter时会尝试去获取对象的锁，如果这个对象没被锁定 or 当前线程已拥有了这个对象的锁，则计数器 +1 ，相应地，执行monitorexit时计数器 -1 ，计数器为0，则释放锁。如果获取对象失败，需要阻塞等待。</p>
+
+<p>虽然这种方式可以保证线程安全，但是性能方面会有些问题。</p>
+
+<p>因为Java的线程是映射到操作系统的原声线程上的，所以如果要阻塞 or 唤醒一个线程，需要操作系统在系统态和用户态之间转换，而这种转换会耗费很多处理器时间。</p>
+
+<p>除此之外，这种同步机制在某些情况下有些极端，如果我们用synchronized关键字修饰前面提到的因式分解的service方法，那么在同一时刻就只有一个线程能执行该方法，也就意味着多个客户端无法同时使用因式分解Servlet，服务的响应性非常低。</p>
+
+<p>不过，虚拟机本身也在对其不断地进行一些优化。</p>
+
+<h4 id="2-重入">2. 重入</h4>
+
+<p>什么是重入？</p>
+
+<p>举个例子，一个加了X锁的方法A，这个方法内调用了方法B，方法B也加了X锁，那么，如果一个线程拿到了方法A的X锁，再调用方法B时，就会尝试获取一个自己已经拥有的X锁，这就是重入。</p>
+
+<p>重入的一种实现方法是：每个锁有一个计数值，若计数值为0，则该锁没被任何线程拥有。当一个线程想拿这个锁时，计数值加1；当一个线程退出同步块时，计数值减1。计数值为0时锁被释放。</p>
+
+<p>synchronized就是一个可重入的锁，我们可以用以下代码证明一下看看：</p>
+
+<p>Parent.java</p>
+
+<pre><code class="language-java">public class Parent {
+    public synchronized void doSomething() {
+        System.out.println(&quot;Parent: calling doSomething&quot;);
+    }
+}
+</code></pre>
+
+<p>Child.java</p>
+
+<pre><code class="language-java">public class Child extends Parent {
+    public synchronized void doSomething() {
+        System.out.println(&quot;Child: calling doSomething&quot;);
+        super.doSomething(); // 获取父类的锁
+    }
+
+    public static void main(String[] args) {
+        Child child = new Child();
+        child.doSomething();
+    }
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>Child: calling doSomething
+Parent: calling doSomething
+</code></pre>
+
+<p>如果synchronized不是一个可重入锁，那么上面代码必将产生死锁。Child和Parent类中doSomething方法都被synchronized修饰，我们在调用子类的重载的方法时，已经获取到了synchronized锁，而该方法内又调用了父类的doSomething，会再次尝试获取该synchronized锁，如果synchronized不是可重入的锁，那么在调用super.doSomething()时将无法获取父类的锁，线程会永远停顿，等待一个永远也无法获得的锁，即发生了死锁。</p>
+
+<h3 id="四-活跃性与性能">四、活跃性与性能</h3>
+
+<p>前面在内置锁部分提到过，如果用synchronized关键字修饰因式分解的service方法，那么每次只有一个线程可以执行，程序的性能将会非常低下，当多个请求同时到达因式分解Servlet时，这个应用便会成为 Poor Concurrency。</p>
+
+<p>那么，难道我们就不能使用synchronized了吗？</p>
+
+<p>当然不是的，只是我们需要恰当且小心地使用。</p>
+
+<p>我们可以通过缩小同步块，来做到既能确保Servlet的并发性，又能保证线程安全性。我们应该尽量将不影响共享状态且执行时间较长的操作从同步块中分离，从而缩小同步块的范围。</p>
+
+<p>下面来看在JCIP中，作者是怎么实现在简单性和并发性之间的平衡的：</p>
+
+<p>缓存最近执行因数分解的数值及其计算结果的Servlet（线程安全且高效的）</p>
+
+<pre><code class="language-java">    @ThreadSafe
+    public class CachedFactorizer implements Servlet {
+        @GuardedBy(&quot;this&quot;) private BigInteger lastNumber;
+        @GuardedBy(&quot;this&quot;) private BigInteger[] lastFactors;
+        @GuardedBy(&quot;this&quot;) private long hits;
+        @GuardedBy(&quot;this&quot;) private long cacheHits;
+
+        // 因为hits和cacheHits也是共享变量，所以需要使用同步 *3
+        public synchronized long gethits() {
+            return hits;
+        }
+        public synchronized double getCacheHitRatio() {
+            return (double) cacheHits / (double) hits;
+        }
+
+        public void service(ServletRequest req, ServletResponse resp) {
+            // 局部变量，不会共享，无需同步
+            BigInteger i = extractFromRequest(req);
+            BigInteger[] factors = null;
+
+            synchronized (this) { // *2
+                ++hits;
+                // 命中缓存
+                if (i.equals(lastNumber)) {
+                    ++cacheHits;
+                    factors = lastFactors.clone();
+                }
+            }
+
+            // 没命中，则进行计算
+            if (factors == null) {
+                factors = factor(i); // *3
+                // 同步更新两个共享变量
+                synchronized (this) { // *1
+                    lastNumber = i;
+                    lastFactors = factors.clone();
+                }
+            }
+
+            encodeIntoResponse(resp, factors);
+        }
+
+    }
+</code></pre>
+
+<p>首先，lastNumber和lastFactors作为两个共享变量是肯定需要同步更新的，因此在 *1 处进行了同步。然后，在 *2 处，判断是否命中缓存的操作序列也必须同步。此外，在 *3 处，缓存命中计数器的实现也需要实现同步，因为计数器是共享的。</p>
+
+<p>安全性是实现了，那么性能上呢？</p>
+
+<p>前面我们说过，应该尽量将 <strong>不影响共享状态</strong> 且 <strong>执行时间较长</strong> 的操作从同步块中分离，从而缩小同步块的范围。那么这个Servlet里不影响共享状态的就是i和factos这两个局部变量，可以看到作者已经将其分离出；执行时间较长的操作就是因式分解了，在 *3 处，CachedFactorizer已经释放了前面获得的锁，在执行因式分解时不需要持有锁。</p>
+
+<p>因此，这样既确保了线程安全，又不会过多影响并发性，并且在每个同步块内的代码都“足够短”。</p>
+
+<p>总之，在并发代码的设计中，我们要尽量设计好每个同步块的大小，在并发性和安全性上做好平衡。</p>
+
+<p>参考自：
+《Java Concurrency in Practice》
+以及其他网络资源</p>
+
+
+  
+<div class="prev-next-post pure-g">
+  <div class="pure-u-1-24" style="text-align: left;">
+    
+    <a href="https://shelbylee.github.io/post/2018/04/05/"><i class="fa fa-chevron-left"></i></a>
+    
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="prev">
+      <a href="https://shelbylee.github.io/post/2018/04/05/">个人博客</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-2-24">
+    &nbsp;
+  </div>
+  <div class="pure-u-10-24">
+    
+  </div>
+  <div class="pure-u-1-24" style="text-align: right;">
+    
+  </div>
+</div>
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'shelbylee';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+</div>
+
+</div>
+</div>
+<script src="https://shelbylee.github.io/js/ui.js"></script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-103593285-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+
+
+</body>
+</html>
+
