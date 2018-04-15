@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.38" />
+
+  <title>浅谈 KMP 算法 &middot; Shelby Lee</title>
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
+
+  
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://shelbylee.github.io/css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://shelbylee.github.io/css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="https://shelbylee.github.io/css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+ 
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  <link rel="shortcut icon" href="https://shelbylee.github.io/img/favicon.ico" type="image/x-icon" />
+
+  
+  
+
+  
+
+  
+</head>
+
+
+</head>
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="https://shelbylee.github.io/">Menu</a>
+
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/"><i class='fa fa-home fa-fw'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/post/"><i class='fa fa-list fa-fw'></i>Posts</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/about/"><i class='fa fa-user fa-fw'></i>About</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/contact/"><i class='fa fa-phone fa-fw'></i>Contact</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/topics/"><i class='fa fa-folder fa-fw'></i>Topics</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/tags/"><i class='fa fa-tags fa-fw'></i>Tags</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/shelbylee" target="_blank"><i class="fa fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small>&copy; 2018. All rights reserved.</small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>浅谈 KMP 算法</h1>
+  <h2></h2>
+</div>
+<div class="content">
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>15 Apr 2018, 23:03</time>
+  </div>
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-folder fa-fw"></i>
+    
+      <a class="post-taxonomy-topic" href="https://shelbylee.github.io/topics/%E7%AE%97%E6%B3%95">算法</a>
+    
+  </div>
+  
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-tags fa-fw"></i>
+    
+      <a class="post-taxonomy-tag" href="https://shelbylee.github.io/tags/2018-04">2018-04</a>
+    
+  </div>
+
+  
+  
+
+
+<span id="busuanzi_container_page_pv">
+  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+</span>
+
+</div>
+
+
+
+  
+
+<p><img src="https://raw.githubusercontent.com/shelbylee/shelbylee.github.io/master/images/227174.jpg" alt="image" /></p>
+
+<p>面试官夺命三连</p>
+
+<p>KMP 是啥？KMP 能干啥？手写 KMP ？</p>
+
+<p><img src="http://img.pconline.com.cn/images/upload/upc/tx/pcdlc/1707/07/c27/52125945_1499426846138.jpg" alt="image" /></p>
+
+<blockquote>
+<p>在计算机科学中，Knuth-Morris-Pratt字符串查找算法（简称为KMP算法）可在一个主文本字符串S内查找一个词W的出现位置。此算法通过运用对这个词在不匹配时本身就包含足够的信息来确定下一个匹配将在哪里开始的发现，从而避免重新检查先前匹配的字符。
+这个算法是由高德纳（Donald Ervin Knuth）和沃恩·普拉特在1974年构思，同年詹姆斯·H·莫里斯也独立地设计出该算法，最终由三人于1977年联合发表。</p>
+</blockquote>
+
+<p>上面这段内容摘自wikipedia，大概就说明了 KMP 这个算法的作用，就是查找一个字符串中某个模式串的出现位置，并且采用的是一种高效的查找方式，这种查找方式通过借助之前已经部分匹配的有效信息来提高匹配的效率。</p>
+
+<hr />
+
+<h3 id="一-暴力匹配算法">一、暴力匹配算法</h3>
+
+<p>那么 KMP 是怎么具有很高的匹配效率的呢？</p>
+
+<p>首先我们先来看一下暴力匹配算法，然后再去讲解 KMP 是怎么做的，从而对比出 KMP 算法的优势。</p>
+
+<p>现在我们要在字符串S中查找模式串P的位置（为了方便阅读，我把每个字符用空格隔开了，但是实际字符串中并无空格，实际字符串中有空格的地方使用&rsquo;_&lsquo;表示，对照下标大家应该可以看得懂）</p>
+
+<p><img src="https://raw.githubusercontent.com/shelbylee/shelbylee.github.io/master/images/kmp1.png" alt="image" /></p>
+
+<p>说明：指针 i 指向字符串S中当前匹配的位置，指针 j 指向模式串P中当前匹配的位置</p>
+
+<h5 id="1">1.</h5>
+
+<p>一开始，i 和 j 都指向数组下标为 0 的位置，也就是从 S[0] 和 P[0] 开始匹配，目前S[0] = &lsquo;L&rsquo;，S[0] = &lsquo;A&rsquo;，即 S[0] != P[0] ，当前字符失配。</p>
+
+<p><img src="https://raw.githubusercontent.com/shelbylee/shelbylee.github.io/master/images/kmp2.png" alt="image" /></p>
+
+<p>那么此时我们令 “ i = i - (j - 1), j = 0 ”，也就是让 i 回溯，且 j 重置为0，这就相当于将模式串P向后移动了一位。</p>
+
+<h5 id="2">2.</h5>
+
+<p>移动之后，发现 S[1] 和 P[0] 还是失配，那么我们继续令 “ i = i - (j - 1), j = 0 ”，此时 i = 2，j = 0。</p>
+
+<p><img src="https://raw.githubusercontent.com/shelbylee/shelbylee.github.io/master/images/kmp3.png" alt="image" /></p>
+
+<h5 id="3">3.</h5>
+
+<p>模式串P继续向后移动，直到匹配到 i = 4，此时 S[4] = P[0]，匹配成功，令 “ i++, j++ ”，继续向后匹配</p>
+
+<p><img src="https://raw.githubusercontent.com/shelbylee/shelbylee.github.io/master/images/kmp4.png" alt="image" /></p>
+
+<h5 id="4">4.</h5>
+
+<p>当 i = 10，j = 6 时，S[10] = &lsquo; &lsquo;, p[6] = &rsquo;D&rsquo;，S[10] != P[6]，此时失配，令 “ i = i - (j - 1), j = 0 ”，此时 i = 5，j = 0</p>
+
+<p><img src="https://raw.githubusercontent.com/shelbylee/shelbylee.github.io/master/images/kmp5.png" alt="image" /></p>
+
+<h5 id="5">5.</h5>
+
+<p>这个时候，i 指针又回溯到了 5 这个位置，然后重新进行比较</p>
+
+<p><img src="https://raw.githubusercontent.com/shelbylee/shelbylee.github.io/master/images/kmp6.png" alt="image" /></p>
+
+<p>而这就是该算法低效的主要原因，因为之前在比较的时候已经判断过，我们知道 S[4] = P[0]，S[5] = P[1]，且 P[0] != P[1]，所以 P[0] 肯定和 S[5] 不相等，这样继续比较 P[0] 和 S[5] 是重复的。</p>
+
+<p>而 KMP 算法的高效就在于对这种情况的优化，它 <strong>利用之前部分匹配的有效信息来修改指针 j 的位置</strong>，从而使得指针 i 不需要再进行回溯。</p>
+
+<p>接下来，我们来看看 KMP 是怎么做到的。</p>
+
+<h3 id="二-kmp算法">二、KMP算法</h3>
+
+<p>我们还是从上面那个例子继续说</p>
+
+<p><img src="https://raw.githubusercontent.com/shelbylee/shelbylee.github.io/master/images/kmp5.png" alt="image" /></p>
+
+<p>如图，当我们匹配到 S[10] 和 P[6] 时，此时失配，KMP 算法并不会像暴力匹配那样，将模式串P向右移动一位，然后继续比较。它采用的方式是，<strong>如果发生失配，则 i 不变，令 j = next[j]</strong>（先知道 next[6] = 2，后面我再解释 next[] 数组是怎么得来的），那么此时模式串P相当于向右移动了 4 个位置。</p>
+
+<p><img src="https://raw.githubusercontent.com/shelbylee/shelbylee.github.io/master/images/kmp7.png" alt="image" /></p>
+
+<p>为什么要这样移动呢？因为在 P[2] 前面的 &ldquo; AB &rdquo; 又可以和 S[10] 前面的 &ldquo; AB &rdquo; 匹配上，从这里继续向后比较是有可能匹配成功的，并且我们没有重复的去比较不可能匹配成功的前几个字符，从而能提高模式串P移动的速率，即提高的算法的效率。</p>
+
+<p>到这里，就可以看出来 KMP 算法的核心就在于那个 next[] 数组，接下来我们来看看这个 next[] 数组到底是怎么得来的。</p>
+
+<h3 id="三-对于-next-数组的理解">三、对于 next[] 数组的理解</h3>
+
+<p>这个 next[] 数组，其实和一个 <strong>最大长度表</strong>密切相关，我们先来看怎样得到这个表。</p>
+
+<p>首先，我们先清楚一个概念，<strong>最长前缀后缀</strong></p>
+
+<p>前缀，指的就是除去末尾元素，该字符串的所有头部组合的集合；</p>
+
+<p>后缀，指的就是除去头部元素，该字符串的所有尾部组合的集合；</p>
+
+<p>那么，最长前缀后缀，指的就是前缀与后缀这两个集合中，公共元素的最大长度。</p>
+
+<p>举个栗子：“ AABA ” 这个字符串的前缀就是 [A, AA, AAB] ，后缀是 [ABA, BA, A]，则公共元素只有 &ldquo; A &ldquo;，则最长前缀后缀为 1 。</p>
+
+<p>明白最长前缀后缀之后，我们便可以计算得出最大长度表了，下面就是得到字符串 “ ABCDABD ” 的最大长度表的过程：</p>
+
+<pre><code>- &quot; A &quot; 的前缀和后缀都为空集，则该字符串的最长前缀后缀为 0 ，因为没有公共元素；
+- &quot; AB &quot; 的前缀为 [A] ，后缀为 [B] ，则该字符串的最长前缀后缀为 0 ，因为没有公共元素；
+- &quot; ABC &quot; 的前缀为 [A, AB] ，后缀为 [BC, C] ，则该字符串的最长前缀后缀为 0 ，因为没有公共元素；
+- &quot; ABCD &quot; 的前缀为 [A, AB, ABC] ，后缀为 [BCD, CD, D] ，则该字符串的最长前缀后缀为 0 ，因为没有公共元素；
+- &quot; ABCDA &quot; 的前缀为 [A, AB, ABC, ABCD] ，后缀为 [BCDA, CDA, DA, A] ，共有元素为 &quot; A &quot; ，则该字符串的最长前缀后缀为 1；
+- &quot; ABCDAB &quot; 的前缀为 [A, AB, ABC, ABCD, ABCDA] ，后缀为 [BCDAB, CDAB, DAB, AB, B] ，共有元素为 &quot; AB &quot; ，则该字符串的最长前缀后缀为 2；
+- &quot; ABCDABD &quot; 的前缀为 [A, AB, ABC, ABCD, ABCDA, ABCDAB] ，后缀为 [BCDABD, CDABD, DABD, ABD, BD, D] ，则该字符串的最长前缀后缀为 0 ，因为没有公共元素。、
+</code></pre>
+
+<p>根据以上计算得到字符串 &ldquo; ABCDABD &rdquo; 的每个子串的 <strong>最长前缀后缀</strong>，可以得到这样一个 <strong>最大长度表</strong></p>
+
+<p><img src="https://img-blog.csdn.net/20140721230517324" alt="image" /></p>
+
+<p>这个表就是：模式串子串对应的各个前缀后缀的公共元素的最大长度表</p>
+
+<p>因为模式串中首尾可能会有重复的字符，所以得到如下结论：</p>
+
+<blockquote>
+<p>遇到失配时，模式串向右移动的位数为：
+<strong>已匹配字符数 - 失配字符的上一位字符所对应的最大长度值</strong>  ，如果已匹配字符数为0，则直接向右移动一位</p>
+</blockquote>
+
+<p>下面，我们来看一下具体是怎么匹配的：</p>
+
+<p>还是以这两个字符串为例</p>
+
+<h5 id="1-1">1.</h5>
+
+<p>一开始字符是不匹配的，直接将模式串P右移即可。</p>
+
+<p><img src="https://raw.githubusercontent.com/shelbylee/shelbylee.github.io/master/images/kmp2.png" alt="image" /></p>
+
+<h5 id="2-1">2.</h5>
+
+<p>直到找到第一个匹配成功的字符，然后继续向后比较</p>
+
+<p><img src="https://raw.githubusercontent.com/shelbylee/shelbylee.github.io/master/images/kmp4.png" alt="image" /></p>
+
+<h5 id="3-1">3.</h5>
+
+<p>当比较到 i = 10，j = 6 ，发现失配，令 j = next[j]，其中，next[j] = 2，根据前面得到的结论：模式串向右移动的位数为 <strong>已匹配字符数 - 失配字符的上一位字符所对应的最大长度值</strong> ，那么，此时模式串移动的位数就是：6 - 2，即向右移动 4 位。</p>
+
+<p><img src="https://raw.githubusercontent.com/shelbylee/shelbylee.github.io/master/images/kmp5.png" alt="image" /></p>
+
+<h5 id="4-1">4.</h5>
+
+<p>移动后，继续比较，此时 i = 10，j = 2，发现失配，那么根据结论，模式串向右移动的位数是： 2 - 0 ，即向右移动 2 位</p>
+
+<p><img src="https://raw.githubusercontent.com/shelbylee/shelbylee.github.io/master/images/kmp7.png" alt="image" /></p>
+
+<h5 id="5-1">5.</h5>
+
+<p>此时仍然失配，且已匹配的字符数为 0 ，则向右移动一位</p>
+
+<p><img src="https://raw.githubusercontent.com/shelbylee/shelbylee.github.io/master/images/kmp8.png" alt="image" /></p>
+
+<h5 id="6">6.</h5>
+
+<p>右移一位后匹配成功，i ，j 指针继续向后走，直到 i = 17，j = 6，此时失配，那么应该向右移动：6 - 2 位，即右移 4 位。</p>
+
+<p><img src="https://raw.githubusercontent.com/shelbylee/shelbylee.github.io/master/images/kmp9.png" alt="image" /></p>
+
+<h5 id="7">7.</h5>
+
+<p>右移 4 位之后，匹配成功，最终找到了模式串P在字符串S中的位置。</p>
+
+<p><img src="https://raw.githubusercontent.com/shelbylee/shelbylee.github.io/master/images/kmp10.png" alt="image" /></p>
+
+<p>这个过程走下来，可以看出关键就是找到每个失配字符前面的字符的最长前缀后缀，根据这个来移动模式串，而 next[] 数组就是最大长度表的体现。</p>
+
+<p>在使用最大长度表进行匹配时，可以观察到，其实我们没有必要去考虑当前失配的字符，只需要当前失配字符的前一个字符就可以，因此，next[] 数组和最大长度表的区别就是，整个 next[] 数组将最大长度表中的值向后移了一位，并且第一个值置为 -1，即在 next[] 数组中每个字符对应的值其实是它前一个字符在最大长度表中对应的值。</p>
+
+<p><img src="https://img-blog.csdn.net/20140721230250468" alt="image" /></p>
+
+<h3 id="四-递推计算-next-数组">四、递推计算 next[] 数组</h3>
+
+<p>我们已经比较感性的去理解了 next[] 数组存放的值是通过计算子串的最长前缀后缀得来的，那么在代码中，具体是怎么计算的呢？</p>
+
+<p>首先，我们在计算 next[j] 的时候，需要分类讨论一下</p>
+
+<h6 id="1-2">1.</h6>
+
+<p>j = 0 时，next[j] = -1。这个很好理解，因为 j = 0 时，肯定不能再向前移动了。</p>
+
+<h6 id="2-2">2.</h6>
+
+<p>j = 1 时，next[j] = 0。因为此时 j 只能移动到 0 ，所以 next[j] = 0。</p>
+
+<h6 id="3-2">3.</h6>
+
+<p>前面两种属于特殊一点的情况，接下来就要考虑普遍的情况了。</p>
+
+<p>对于k，已知P[0 ~ k-1] = P[j-k ~ j-1]。意思就是next[j] = k。</p>
+
+<p>那么接下来我们就需要计算 next[j + 1] 才能完成递推</p>
+
+<p>当 P[k] = P[j] 时，则 next[j + 1] = next[j] + 1 = k + 1。这种情况的证明如下，这个证明很直白，大家不要一看到证明就头疼~</p>
+
+<blockquote>
+<p>已知 next[j] = k ，且 P[k] = P[j]，则 P[0 ~ k-1] + P[k] = p[j-k ~ j-1] + P[j]。
+即：P[0 ~ k] = P[j-k ~ j]，即next[j + 1] = k + 1 = next[j] + 1。</p>
+</blockquote>
+
+<h6 id="4-2">4.</h6>
+
+<p>比较难理解的是 P[k] != P[j] 这种情况</p>
+
+<p>从图里可以看到，此时 P[k] != P[j]</p>
+
+<p><img src="https://img-blog.csdn.net/20140729181940812" alt="image" /></p>
+
+<p>看上面这个图，此时 P[j + 1] 指向的字符是 &lsquo;E&rsquo; ，并且 k = 2，那么我们可以看出来 &lsquo;E&rsquo; 前面的模式串的最长前缀后缀是 2 ，即 &ldquo; AB &rdquo; ，很明显，此时是对于 &lsquo;E&rsquo; 前面的模式串是不存在最长前缀后缀为 k + 1 = 3，也就是 &ldquo; ABC &rdquo; 这种情况的，所以我们只能缩小这个范围，去找是不是有长度更短的公共前缀后缀。</p>
+
+<p>在代码中的对这种情况的处理就是令 k = next[k] ，那么为什么要不断递归 k = next[k] 就能找到更短的公共前缀后缀呢？</p>
+
+<p><img src="https://images0.cnblogs.com/blog/416010/201308/17122358-fd7e52dd382c4268a8ff52b85bff465d.png" alt="image" /></p>
+
+<p>上图中这个模式串，现在把它变成下面图中的样子</p>
+
+<p><img src="https://images0.cnblogs.com/blog/416010/201308/17122439-e349fed25e974e7886a27d18871ae48a.png" alt="image" /></p>
+
+<p>我们现在是将 &ldquo; ABAC &rdquo; 这一段字符串（也就是 k 及其之前的字符串）拿出来，这样方便肉眼比较。</p>
+
+<p>现在我们拿前缀 &ldquo; ABAC &rdquo; 去跟后缀 &ldquo; ABAB &rdquo; 匹配，如果 P[k] != P[j]，下一步就是用p[next[k]] 去跟 P[j] 继续匹配，然后重复这个过程，因为这个时候我们是肯定找不到 &ldquo; ABAB &rdquo; 这个最长的后缀串了，但是我们可以尝试得到更短的，那么这个递归，其实就相当于在图中上面的字符串 &ldquo; DABABC &rdquo; 中查找 &ldquo; ABAC &rdquo; 位置的过程！最后得到的就是更短的公共前缀后缀 or 没有最短的公共前缀后缀。</p>
+
+<p>终于，我们可以写出第一份 KMP 代码了</p>
+
+<pre><code class="language-java">    public static void kmp(String string, String pattern) {
+        char[] s = string.toCharArray();
+        char[] p = pattern.toCharArray();
+
+        int len_s = string.length;
+        int len_p = pattern.length;
+
+        int i = 0, j = 0;
+
+        int[] next = getNext(pattern);
+
+        while (i &lt; len_s &amp;&amp; j &lt; len_p) {
+
+            if (j == -1 || s[i] == p[j]) {
+
+                i++;
+                j++;
+
+            } else {
+                j = next[j];
+            }
+        }
+
+        if (j == p.length) {
+            return i - j;
+        } else {
+            return -1;
+        }
+    }
+
+    public static int[] getNext(String pattern) {
+        char[] p = pattern.toCharArray();
+        int[] next = new int[p.length];
+
+        next[0] = -1;
+
+        int j = 0;
+        int k = -1;
+
+        while (j &lt; p.length - 1) {
+            if (k == -1 || p[j] == p[k]) {
+                next[++j] = ++k;
+            } else {
+                k = next[k];
+            }
+        }
+
+        return next;
+    }
+</code></pre>
+
+<p>但是，这份代码还是存在一个问题的，这个问题。。。明天再来写，今天要早睡，明天要拍毕业照啊！！</p>
+
+<p>参考资料：</p>
+
+<p>《算法导论》 字符串匹配</p>
+
+<p><a href="https://blog.csdn.net/v_july_v/article/details/7041827">https://blog.csdn.net/v_july_v/article/details/7041827</a></p>
+
+<p><a href="http://www.ruanyifeng.com/blog/2013/05/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm.html">http://www.ruanyifeng.com/blog/2013/05/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm.html</a></p>
+
+<p><a href="https://zh.wikipedia.org/wiki/%E5%85%8B%E5%8A%AA%E6%96%AF-%E8%8E%AB%E9%87%8C%E6%96%AF-%E6%99%AE%E6%8B%89%E7%89%B9%E7%AE%97%E6%B3%95">https://zh.wikipedia.org/wiki/%E5%85%8B%E5%8A%AA%E6%96%AF-%E8%8E%AB%E9%87%8C%E6%96%AF-%E6%99%AE%E6%8B%89%E7%89%B9%E7%AE%97%E6%B3%95</a></p>
+
+<p><a href="https://kirainmoe.com/blog/post/kmp-algorithm-for-matching-string/">https://kirainmoe.com/blog/post/kmp-algorithm-for-matching-string/</a></p>
+
+
+  
+<div class="prev-next-post pure-g">
+  <div class="pure-u-1-24" style="text-align: left;">
+    
+    <a href="https://shelbylee.github.io/post/2018/04/07/"><i class="fa fa-chevron-left"></i></a>
+    
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="prev">
+      <a href="https://shelbylee.github.io/post/2018/04/07/">线程安全性</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-2-24">
+    &nbsp;
+  </div>
+  <div class="pure-u-10-24">
+    
+  </div>
+  <div class="pure-u-1-24" style="text-align: right;">
+    
+  </div>
+</div>
+
+
+
+  
+
+</div>
+
+</div>
+</div>
+<script src="https://shelbylee.github.io/js/ui.js"></script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-103593285-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+
+
+</body>
+</html>
+

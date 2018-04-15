@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>算法 on Shelby Lee</title>
+    <link>https://shelbylee.github.io/topics/%E7%AE%97%E6%B3%95/</link>
+    <description>Recent content in 算法 on Shelby Lee</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2018. All rights reserved.</copyright>
+    <lastBuildDate>Sun, 15 Apr 2018 23:03:15 +0800</lastBuildDate>
+    
+	<atom:link href="https://shelbylee.github.io/topics/%E7%AE%97%E6%B3%95/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>浅谈 KMP 算法</title>
+      <link>https://shelbylee.github.io/post/2018/04/15/</link>
+      <pubDate>Sun, 15 Apr 2018 23:03:15 +0800</pubDate>
+      
+      <guid>https://shelbylee.github.io/post/2018/04/15/</guid>
+      <description>面试官夺命三连 KMP 是啥？KMP 能干啥？手写 KMP ？ 在计算机科学中，Knuth-Morris-Pratt字符串查找算法（简称为KMP算法）可在一个主</description>
+    </item>
+    
+  </channel>
+</rss>
