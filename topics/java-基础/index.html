@@ -8,7 +8,7 @@
   <meta name="description" content="">
   <meta name="generator" content="Hugo 0.38" />
 
-  <title>Posts &middot; Shelby Lee</title>
+  <title>Java 基础 &middot; Shelby Lee</title>
 
   
   
@@ -44,7 +44,7 @@
 
  
   
-  <link rel="alternate" type="application/rss+xml" title="Shelby Lee" href="https://shelbylee.github.io/post/index.xml" />
+  <link rel="alternate" type="application/rss+xml" title="Shelby Lee" href="https://shelbylee.github.io/topics/java-%E5%9F%BA%E7%A1%80/index.xml" />
   
 
   
@@ -128,7 +128,7 @@
 
     
     <li class="pure-menu-item">
-      <a class="pure-menu-link" href="https://shelbylee.github.io/post/index.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      <a class="pure-menu-link" href="https://shelbylee.github.io/topics/java-%E5%9F%BA%E7%A1%80/index.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
     </li>
     
 
@@ -229,29 +229,69 @@
 
 
 <div class="header">
-  <h1>Posts</h1>
+  <h1>Java 基础</h1>
 </div>
+
 <div class="content">
   
-  <h2>2018</h2>
-  <ul>
-  
-    <li><time>19 Apr 2018, 09:33</time> - <a href="https://shelbylee.github.io/post/2018/04/19/">关于 try 和 finally 中的 return</a></li>
+    <article>
+  <header>
+    <h2><a href="https://shelbylee.github.io/post/2018/04/19/">关于 try 和 finally 中的 return</a></h2>
+
+    <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>19 Apr 2018, 09:33</time>
+  </div>
 
   
-    <li><time>18 Apr 2018, 17:14</time> - <a href="https://shelbylee.github.io/post/2018/04/18/">春招感想</a></li>
 
   
-    <li><time>16 Apr 2018, 19:35</time> - <a href="https://shelbylee.github.io/post/2018/04/16/">浅谈 KMP 算法</a></li>
+  
+  
+  <div>
+    <i class="fa fa-folder fa-fw"></i>
+    
+      <a class="post-taxonomy-topic" href="https://shelbylee.github.io/topics/java-%E5%9F%BA%E7%A1%80">Java 基础</a>
+    
+  </div>
+  
+  
 
   
-    <li><time>07 Apr 2018, 22:14</time> - <a href="https://shelbylee.github.io/post/2018/04/07/">线程安全性</a></li>
+  
+  
+  <div>
+    <i class="fa fa-tags fa-fw"></i>
+    
+      <a class="post-taxonomy-tag" href="https://shelbylee.github.io/tags/2018-04">2018-04</a>
+    
+  </div>
 
   
-    <li><time>05 Apr 2018, 14:50</time> - <a href="https://shelbylee.github.io/post/2018/04/05/">个人博客</a></li>
+  
+
+
+
+
+</div>
+
+
+
+  </header>
+
+  <p>
+  关于 try 和 finally 中的 return 首先我们来看一段代码： public class Test { public static int inc() { int x = 1; try { return ++x; // 1* } catch (Exception e) { } finally { x++; } return x; } public static void main(String[] args) { System.out.println(inc()); } } 它的输出结果是多少呢
+  </p>
 
   
-  </ul>
+  <footer>
+    <a href="https://shelbylee.github.io/post/2018/04/19/">Read more<i class="fa fa-angle-double-right fa-fw"></i></a>
+  </footer>
+  
+</article>
+
   
 </div>
 
@@ -279,4 +319,3 @@
 
 </body>
 </html>
-

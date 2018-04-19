@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.38" />
+
+  <title>关于 try 和 finally 中的 return &middot; Shelby Lee</title>
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
+
+  
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://shelbylee.github.io/css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://shelbylee.github.io/css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="https://shelbylee.github.io/css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+ 
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  <link rel="shortcut icon" href="https://shelbylee.github.io/img/favicon.ico" type="image/x-icon" />
+
+  
+  
+
+  
+
+  
+</head>
+
+
+</head>
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="https://shelbylee.github.io/">Menu</a>
+
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/"><i class='fa fa-home fa-fw'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/post/"><i class='fa fa-list fa-fw'></i>Posts</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/about/"><i class='fa fa-user fa-fw'></i>About</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/contact/"><i class='fa fa-phone fa-fw'></i>Contact</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/topics/"><i class='fa fa-folder fa-fw'></i>Topics</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/tags/"><i class='fa fa-tags fa-fw'></i>Tags</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/shelbylee" target="_blank"><i class="fa fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small>&copy; 2018. All rights reserved.</small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>关于 try 和 finally 中的 return</h1>
+  <h2></h2>
+</div>
+<div class="content">
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>19 Apr 2018, 09:33</time>
+  </div>
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-folder fa-fw"></i>
+    
+      <a class="post-taxonomy-topic" href="https://shelbylee.github.io/topics/java-%E5%9F%BA%E7%A1%80">Java 基础</a>
+    
+  </div>
+  
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-tags fa-fw"></i>
+    
+      <a class="post-taxonomy-tag" href="https://shelbylee.github.io/tags/2018-04">2018-04</a>
+    
+  </div>
+
+  
+  
+
+
+
+
+</div>
+
+
+
+  
+
+<h3 id="关于-try-和-finally-中的-return">关于 try 和 finally 中的 return</h3>
+
+<p>首先我们来看一段代码：</p>
+
+<pre><code class="language-java">public class Test {
+
+    public static int inc() {
+        int x = 1;
+
+        try {
+            return ++x; // 1*
+        } catch (Exception e) {
+            
+        } finally {
+            x++;
+        }
+
+        return x;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(inc());
+    }
+}
+</code></pre>
+
+<p>它的输出结果是多少呢？</p>
+
+<pre><code class="language-java">2
+</code></pre>
+
+<p>我们走一下这个过程，x 的初始值是 1，然后进入到了 try 语句块中，在 1* 处，++x，x 会先自增，现在 x = 2，之后 return，return 是用来跳出当前方法，而 finally 是无论 try 语句发生了什么，都会执行的一个语句块，那么 try 中 return 和 finally 执行的顺序到底是谁先谁后呢？</p>
+
+<p>我们来看 Oracle 文档中对 finally Block 的描述 <a href="https://docs.oracle.com/javase/tutorial/essential/exceptions/finally.html">The finally Block (The Java&trade; Tutorials &gt; Essential Classes &gt; Exceptions)</a></p>
+
+<blockquote>
+<h4 id="the-finally-block">The finally Block</h4>
+
+<p>The finally block always executes when the try block exits. This ensures that the finally block is executed even if an unexpected exception occurs. But finally is useful for more than just exception handling — it allows the programmer to avoid having cleanup code accidentally bypassed by a return, continue, or break. Putting cleanup code in a finally block is always a good practice, even when no exceptions are anticipated.</p>
+
+<blockquote>
+<p>Note: If the JVM exits while the try or catch code is being executed, then the finally block may not execute. Likewise, if the thread executing the try or catch code is interrupted or killed, the finally block may not execute even though the application as a whole continues.</p>
+</blockquote>
+</blockquote>
+
+<p>从这段解释中我们可以知道，当 try 语句块退出时，finally 语句块总是会执行，这保证了当有异常发生时，finally 语句块会被执行，不过 finally 语句块的作用不仅于此，它帮助程序员避免在执行 return or continue or break 时绕过清理代码，所以即使没有异常需要捕获，将清理代码放到 finally 语句块中也是一个好的选择。</p>
+
+<p>需要注意的是，只有一种情况：如果在执行 try or catch 语句时 JVM 退出了，比如我们调用 <code>System.exit</code>，那么 finally 才不会被执行。</p>
+
+<p>在 Java 语言规范 <a href="https://docs.oracle.com/javase/specs/jls/se7/html/jls-14.html#jls-14.17">Chapter&nbsp;14.&nbsp;Blocks and Statements</a> 中也提到：</p>
+
+<blockquote>
+<p>The preceding descriptions say &ldquo;attempts to transfer control&rdquo; rather than just &ldquo;transfers control&rdquo; because if there are any try statements (§14.20) within the method or constructor whose try blocks or catch clauses contain the return statement, then any finally clauses of those try statements will be executed, in order, innermost to outermost, before control is transferred to the invoker of the method or constructor. Abrupt completion of a finally clause can disrupt the transfer of control initiated by a return statement.</p>
+</blockquote>
+
+<p>如果在 try or catch 语句块中包含 return 语句，那么 finally 语句会在其 return 之前执行。</p>
+
+<p>根据以上描述，我们知道了 finally 语句块会在 try or catch 语句块执行前执行，那么当 x 自增后，会继续执行 finally 语句块中的内容，即 x++，那么此时 x = 3，可是这段程序的返回结果是 2 ，这又是为什么呢？</p>
+
+<p>我们来看 JVM 规范中的描述 <a href="https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html#jvms-4.10.2.5">Chapter&nbsp;4.&nbsp;The class File Format</a></p>
+
+<blockquote>
+<p>Control can be transferred to the finally clause (the finally subroutine can be invoked) in several different ways. If the try clause completes normally, the finally subroutine is invoked via a jsr instruction before evaluating the next expression. A break or continue inside the try clause that transfers control outside the try clause executes a jsr to the code for the finally clause first. If the try clause executes a return, the compiled code does the following:
+1. Saves the return value (if any) in a local variable.
+2. Executes a jsr to the code for the finally clause.
+3. Upon return from the finally clause, returns the value saved in the local variable.</p>
+</blockquote>
+
+<p>也就是说，如果 try 语句中包含 return，那么编译后的代码会执行以下操作：</p>
+
+<ol>
+<li>将 return 的值存到一个局部变量中</li>
+<li>执行 jsr 指令到 finally 语句块中的代码</li>
+<li>从 finally 语句返回时，返回在局部变量中保存的值</li>
+</ol>
+
+<p>终于，谜团揭开了！原来在 finally 语句中执行完毕后，它会返回存在局部变量中的在 try 语句块中 return 的值，因此它返回的是 1* 处的 x，也就是返回的 2。</p>
+
+<p>并且还需要注意的是，finally 中的 return 会覆盖 try 中的 return。</p>
+
+<p>参考资料：</p>
+
+<p><a href="http://www.cnblogs.com/averey/p/4379646.html">http://www.cnblogs.com/averey/p/4379646.html</a>
+<a href="https://docs.oracle.com/javase">https://docs.oracle.com/javase</a></p>
+
+
+  
+<div class="prev-next-post pure-g">
+  <div class="pure-u-1-24" style="text-align: left;">
+    
+    <a href="https://shelbylee.github.io/post/2018/04/18/"><i class="fa fa-chevron-left"></i></a>
+    
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="prev">
+      <a href="https://shelbylee.github.io/post/2018/04/18/">春招感想</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-2-24">
+    &nbsp;
+  </div>
+  <div class="pure-u-10-24">
+    
+  </div>
+  <div class="pure-u-1-24" style="text-align: right;">
+    
+  </div>
+</div>
+
+
+
+  
+
+</div>
+
+</div>
+</div>
+<script src="https://shelbylee.github.io/js/ui.js"></script>
+
+</script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-103593285-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+
+
+</body>
+</html>
+
