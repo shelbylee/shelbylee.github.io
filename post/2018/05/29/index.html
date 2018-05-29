@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.38" />
+
+  <title>排序算法总结 &middot; Shelby Lee</title>
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
+
+  
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://shelbylee.github.io/css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://shelbylee.github.io/css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="https://shelbylee.github.io/css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+ 
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  <link rel="shortcut icon" href="https://shelbylee.github.io/img/favicon.ico" type="image/x-icon" />
+
+  
+  
+
+  
+
+  
+</head>
+
+
+</head>
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="https://shelbylee.github.io/">Menu</a>
+
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/"><i class='fa fa-home fa-fw'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/post/"><i class='fa fa-list fa-fw'></i>Posts</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/about/"><i class='fa fa-user fa-fw'></i>About</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/contact/"><i class='fa fa-phone fa-fw'></i>Contact</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/topics/"><i class='fa fa-folder fa-fw'></i>Topics</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/tags/"><i class='fa fa-tags fa-fw'></i>Tags</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/shelbylee" target="_blank"><i class="fa fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small>&copy; 2018. All rights reserved.</small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>排序算法总结</h1>
+  <h2></h2>
+</div>
+<div class="content">
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>29 May 2018, 10:45</time>
+  </div>
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-folder fa-fw"></i>
+    
+      <a class="post-taxonomy-topic" href="https://shelbylee.github.io/topics/%E7%AE%97%E6%B3%95">算法</a>
+    
+  </div>
+  
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-tags fa-fw"></i>
+    
+      <a class="post-taxonomy-tag" href="https://shelbylee.github.io/tags/2018-05">2018-05</a>
+    
+  </div>
+
+  
+  
+
+
+
+
+</div>
+
+
+
+  
+
+<h2 id="内部排序">内部排序</h2>
+
+<p>以下为基于比较的排序。</p>
+
+<h3 id="一-插入排序">一、插入排序</h3>
+
+<h4 id="直接插入排序">直接插入排序</h4>
+
+<ul>
+<li><p>基本思想：
+将元素插入到已经排好序的序列中。第一个元素已经是有序序列，然后比较外围的元素和序列的最后一个元素，判断是否需要插入，如果小，则插入。</p></li>
+
+<li><p>时间复杂度：最优 O(n)   最差 O(n^2)</p></li>
+
+<li><p>是否稳定：
+是</p></li>
+</ul>
+
+<pre><code class="language-java">    public void insertSort(int[] arr) {
+        int n = arr.length;
+        for (int i = 1; i &lt; n; i++) 
+            for (int j = i - 1; j &gt;= 0; j--)
+                if (arr[j + 1] &lt; arr[j])
+                    swap(arr, j + 1, j);
+    }
+</code></pre>
+
+<p><strong>改进后的插入排序</strong></p>
+
+<p>比如，用二分查找优化插入排序，因为是要插入到已经排好序的序列当中，所以在查找插入位置这个地方可以用二分查找来优化。</p>
+
+<pre><code class="language-java">    public int binarySearch(int[] arr, int low, int high, int key) {
+        while (low &lt;= high) {
+            int mid = low + (high - low) / 2;
+            if (key &lt; arr[mid])
+                high = mid - 1;
+            else
+                low = mid + 1;
+        }
+        return low;
+    }
+
+    public void insertSort(int[] arr) {
+        int n = arr.length;
+        for (int i = 1; i &lt; n; i++)
+            // determine whether to insert
+            if (arr[i] &lt; arr[i - 1]) {
+                // record the element to insert
+                int key = arr[i];
+                // find insert index
+                int indexInsert = binarySearch(arr, 0, i - 1, arr[i]);
+                // move elements
+                for (int j = i - 1; j &gt;= indexInsert; j--)
+                    arr[j + 1] = arr[j];
+                // insert the key
+                arr[indexInsert] = key;
+            }
+    }
+</code></pre>
+
+<h3 id="二-选择排序">二、选择排序</h3>
+
+<h4 id="1-简单选择排序">1. 简单选择排序</h4>
+
+<ul>
+<li><p>基本思想：
+选出后面最小的元素和前面的交换</p></li>
+
+<li><p>时间复杂度： 最优 O(n^2)  最差 O(n^2)</p></li>
+
+<li><p>是否稳定：
+否</p></li>
+</ul>
+
+<pre><code class="language-java">    public void selectSort(int[] arr) {
+
+        int n = arr.length;
+
+        for (int i = 0; i &lt; n; i++) {
+            int minIndex = i;
+            // find the min index
+            for (int j = i + 1; j &lt; n; j++) {
+                if (arr[j] &lt; arr[minIndex])
+                    minIndex = j;
+            }
+            if (minIndex != i)
+                swap(arr, i, minIndex);
+        }
+    }
+</code></pre>
+
+<p><strong>改进后的选择排序</strong></p>
+
+<p>之前的选择排序是一趟只找到最小的，如果一趟可以把最大最小都找出来，就可以将循环的次数减半。</p>
+
+<p>不过在交换时需要注意一种情况，就是第一个元素就已经是最大元素的情况，因为前面已经交换过 i 和 min，所以再交换时就是交换的 n - i - 1 和 min，而不是 max。</p>
+
+<pre><code class="language-java">    public void selectSort(int[] arr) {
+
+        int n = arr.length;
+
+        for (int i = 0; i &lt; n / 2; i++) {
+            int min = i;
+            int max = i;
+            for (int j = i + 1; j &lt; n - i; j++) {
+                // find the min element
+                if (arr[j] &lt; arr[min]) {
+                    min = j;
+                    continue;
+                }
+                // find the max element
+                if (arr[j] &gt; arr[max])
+                    max = j;
+            }
+            swap(arr, i, min);
+
+            if (max != i)
+                swap(arr, n - i - 1, max);
+            else // the first element is the max element
+                swap(arr, n - i - 1, min);
+        }
+    }
+</code></pre>
+
+<h4 id="2-堆排序">2. 堆排序</h4>
+
+<ul>
+<li><p>基本思想：
+堆排序也是一种直接选择排序，因为它也是将后面的元素</p></li>
+
+<li><p>时间复杂度： 最优 O(nlgn) 最差 O(nlgn) 是一个很优秀的排序算法</p></li>
+
+<li><p>是否稳定：
+否</p></li>
+</ul>
+
+<pre><code class="language-java">    public void adjustHeap(int[] arr, int i, int len) {
+
+        int parent = arr[i];
+
+        // start from left child
+        for (int k = 2 * i + 1; k &lt; len; k = 2 * k + 1) {
+            // find max child (left or right)
+            if (k + 1 &lt; len &amp;&amp; arr[k + 1] &gt; arr[k])
+                k++;
+            // compare the parent and its child, but don't swap
+            if (arr[k] &gt; arr[i]) {
+                arr[i] = arr[k];
+                i = k;
+            } else
+                break;
+        }
+
+        // insert the original parent on index i
+        arr[i] = parent;
+    }
+
+    public void heapSort(int[] arr) {
+
+        int len = arr.length;
+
+        // adjust heap from the last none-leaf node
+        // from bottom to up; from right to left
+        for (int i = len / 2 - 1; i &gt;= 0; i--)
+            adjustHeap(arr, i, len);
+
+        // swap the top element and the last element
+        for (int i = len - 1; i &gt;= 0; i--) {
+            swap(arr, i, 0);
+            adjustHeap(arr, 0, i);
+        }
+    }
+</code></pre>
+
+<h3 id="三-归并排序">三、归并排序</h3>
+
+<ul>
+<li><p>基本思想：分治。将两个有序序列合并成一个有序序列，递归进行。需要辅助数组。</p></li>
+
+<li><p>时间复杂度： 最优 O(nlgn) 最差 O(nlgn)</p></li>
+
+<li><p>空间复杂度
+O(n)</p></li>
+
+<li><p>是否稳定：
+是</p></li>
+</ul>
+
+<pre><code class="language-java">    /* create an array in advance to avoid creating arrays frequently */
+    private void sort(int[] arr) {
+        int n = arr.length;
+        int[] temp_arr = new int[n];
+        mergeSort(arr, 0, n - 1, temp_arr);
+    }
+
+    public void mergeSort(int[] arr, int left, int right, int[] temp_arr) {
+        if (left &lt; right) {
+            int mid = left + (right - left) / 2;
+            mergeSort(arr, left, mid, temp_arr);
+            mergeSort(arr, mid + 1, right, temp_arr);
+            merge(arr, left, mid, right, temp_arr);
+        }
+    }
+
+    public void merge(int[] arr, int left, int mid, int right, int[] temp_arr) {
+
+        int i = left;
+        int j = mid + 1;
+        int t = 0;
+
+        while (i &lt;= mid &amp;&amp; j &lt;= right) {
+            if (arr[i] &lt; arr[j]) {
+                temp_arr[t++] = arr[i];
+                i++;
+            } else {
+                temp_arr[t++] = arr[j];
+                j++;
+            }
+        }
+
+        // insert the remaining elements
+        while (i &lt;= mid)
+            temp_arr[t++] = arr[i++];
+        while (j &lt;= right)
+            temp_arr[t++] = arr[j++];
+
+        t = 0;
+        // copy elements into array
+        while (left &lt;= right)
+            arr[left++] = temp_arr[t++];
+    }
+</code></pre>
+
+<h3 id="四-交换排序">四、交换排序</h3>
+
+<h4 id="1-冒泡排序">1. 冒泡排序</h4>
+
+<ul>
+<li><p>基本思想：
+总共有 n 个元素，就比较 n - 1 趟，每一趟比较都会将相邻元素进行比较，然后将较大的元素向后放，就像大数沉底，小数像上冒一样。冒泡排序的交换次数等于原始序列的逆序数。</p></li>
+
+<li><p>时间复杂度： 最优 O(n) 最差也是平均 O(n^2)</p></li>
+
+<li><p>是否稳定：
+是</p></li>
+</ul>
+
+<pre><code class="language-java">    public void bubbleSort(int[] arr) {
+        int n = arr.length;
+        for (int i = 0; i &lt; n - 1; i++) {
+            for (int j = 0; j &lt; n - i - 1; j++) {
+                if (arr[j] &gt; arr[j + 1])
+                    swap(arr, j, j + 1);
+            }
+        }
+    }
+</code></pre>
+
+<p><strong>改进后的冒泡排序一</strong></p>
+
+<p>交换过后，会有部分元素是已经排好序了，这一部分再进行比较是没有意义的，可以从这个地方入手改进冒泡排序。</p>
+
+<p>用一个标志位记录最后一次进行交换的位置，这个位置后面的元素是没有进行交换的，说明是已经排好序的，所以不需要再比较。</p>
+
+<pre><code class="language-java">    public void bubbleSort(int[] arr) {
+
+        int n = arr.length;
+        int i = n - 1;
+        int pos = 0;
+
+        while (i &gt; 0) {
+            for (int j = 0; j &lt; i; j++) {
+                pos = 0;
+                if (arr[j] &gt; arr[j + 1]) {
+                    swap(arr, j, j + 1);
+                    pos = j;
+                }
+            }
+            i = pos;
+        }
+    }
+</code></pre>
+
+<p><strong>改进后的冒泡排序二</strong></p>
+
+<p>双向冒泡（正反两个方向同时排序），使排序次数几乎减少一半</p>
+
+<pre><code class="language-java">    public void bubbleSort(int[] arr) {
+
+        int n = arr.length;
+        int left = 0;
+        int right = n - 1;
+
+        while (left &lt; right) {
+            for (int i = left; i &lt; right; i++) {
+                if (arr[i] &gt; arr[i + 1])
+                    swap(arr, i, i + 1);
+            }
+            right--;
+
+            for (int i = right; i &gt; left; i--) {
+                if (arr[i] &lt; arr[i - 1])
+                    swap(arr, i, i - 1);
+            }
+            left++;
+        }
+    }
+</code></pre>
+
+<h4 id="2-快速排序">2. 快速排序</h4>
+
+<ul>
+<li><p>基本思想：
+根据选择的基准元素进行划分，然后两边都进行排序，再递归进行。需要注意的是，遍历需要从选择的基准元素的反方向开始。</p></li>
+
+<li><p>时间复杂度： 最优也是平均 O(nlgn) 最差 O(n^2) 即每次选的基准元素都是最大（小）值</p></li>
+
+<li><p>是否稳定：
+否</p></li>
+</ul>
+
+<pre><code class="language-java">    public void quickSort(int[] arr, int low, int high) {
+        if (low &lt; high) {
+            int pivotLoc = partition(arr, low, high);
+            quickSort(arr, low, pivotLoc - 1);
+            quickSort(arr, pivotLoc + 1, high);
+        }
+    }
+
+    public int partition(int[] arr, int low, int high) {
+        int pivot = arr[low];
+
+        while (low &lt; high) {
+            while (low &lt; high &amp;&amp; arr[high] &gt;= pivot)
+                high--;
+            swap(arr, low, high);
+
+            while (low &lt; high &amp;&amp; arr[low] &lt;= pivot)
+                low++;
+            swap(arr, low, high);
+        }
+
+        return low;
+    }
+</code></pre>
+
+<h2 id="外部排序">外部排序</h2>
+
+<p>非基于比较的排序，时间复杂度可以达到 O(n)，其实是用空间换时间。</p>
+
+<p>下面列举的都是线性时间排序法</p>
+
+<h3 id="1-计数排序-counting-sort">1. 计数排序（Counting Sort）</h3>
+
+<ul>
+<li><p>基本思想：
+利用数组下标来排序。但只适合有限数值的数字，序列的数字最大值 k 如果太大，那么开的辅助数组 C[] 就会很大，占用太多空间。
+这种思路经常被用到。</p></li>
+
+<li><p>时间复杂度： 最优也是平均 O(n + k) 最差 O(n^2) 即每次选的基准元素都是最大（小）值</p></li>
+
+<li><p>是否稳定：
+是</p></li>
+</ul>
+
+<pre><code class="language-java">    public int[] countingSort(int[] A, int k) {
+        int n = A.length;
+        int[] C = new int[k + 1];
+
+        // counting the number of times each element appears in A
+        for (int i = 0; i &lt; n; i++) {
+            C[A[i]]++;
+        }
+
+        // counting elements less than or equal to C[i]
+        for (int i = 1; i &lt;= k; i++) {
+            C[i] = C[i] + C[i - 1];
+        }
+
+        // insert into result array
+        int[] B = new int[n];
+        for (int i = n - 1; i &gt;= 0; i--) {
+            B[C[A[i]] - 1] = A[i];
+            C[A[i]]--;
+        }
+
+        return B;
+    }
+</code></pre>
+
+<h3 id="2-桶排序-bucket-sort">2. 桶排序（Bucket Sort）</h3>
+
+<ul>
+<li>基本思想：
+把数组中数据放到有限个桶中，在每个桶中分别进行排序（可以采用任意排序方法）。</li>
+</ul>
+
+<p>模拟画图 ≡ω≡</p>
+
+<pre><code class="language-java">      input:[12,22,2,13,23,3]
+
+     |     |     |     |     |     |
+     | 2,3 |     |12,13|     |22,23|
+     |_____|     |_____|     |_____|
+     bucket1     bucket2     bucket3
+      (1-10)     (11-20)     (21-30)
+
+      output:[2,3,12,13,22,23]   
+</code></pre>
+
+<ul>
+<li><p>时间复杂度： 最优近似 O(n) 最差 O(n^2) 即每次选的基准元素都是最大（小）值</p></li>
+
+<li><p>是否稳定：
+是</p></li>
+</ul>
+
+<pre><code class="language-java">    public void bucketSort(int[] arr){
+
+        int n = arr.length;
+
+        int max = arr[0];
+        int min = arr[0];
+        for (int num : arr) {
+            if (num &lt; min)
+                min = num;
+            if (num &gt; max)
+                max = num;
+        }
+
+        // create bucket
+        int bucketNum = max / 10 - min / 10 + 1;
+        List bucketList = new ArrayList&lt;List&lt;Integer&gt;&gt;();
+        for (int i = 1; i &lt;= bucketNum; i++) {
+            bucketList.add(new ArrayList&lt;Integer&gt;());
+        }
+
+        // insert into bucket
+        for (int i = 0; i &lt; n; i++) {
+            int index = (arr[i] - min) / 10;
+            ((ArrayList&lt;Integer&gt;)bucketList.get(index)).add(arr[i]);
+        }
+
+        ArrayList&lt;Integer&gt; bucket = null;
+        int index = 0;
+        for (int i = 0; i &lt; bucketNum; i++) {
+            bucket = (ArrayList&lt;Integer&gt;)bucketList.get(i);
+            bucketInsertSort(bucket);
+            for (int num : bucket) {
+                arr[index++] = num;
+            }
+        }
+    }
+
+    public void bucketInsertSort(List&lt;Integer&gt; bucket) {
+        for (int i = 0; i &lt; bucket.size(); i++) {
+            int temp = bucket.get(i);
+            int j = i - 1;
+            for (; j &gt;= 0 &amp;&amp; bucket.get(j) &gt; temp; j--) {
+                bucket.set(j + 1, bucket.get(j));
+            }
+            bucket.set(j + 1, temp);
+        }
+    }
+</code></pre>
+
+<h3 id="3-基数排序-radix-sort">3. 基数排序（Radix Sort）</h3>
+
+<ul>
+<li>基本思想：</li>
+</ul>
+
+<p>前面的计数和桶排序都是只能排一个关键字，而基数排序可以排多个关键字。</p>
+
+<p>基数排序分为两种：假设有二元组 (a, b)，以 a 为首要关键字，b 为次要关键字排序
+1. MSD(Most Siginificant Digit) 先排 a，后排 b
+2. LSD(Least Siginificant Digit) 先排 b，后排 a</p>
+
+<p>基数排序需要使用稳定的排序算法，一般用计数或者桶排序。</p>
+
+<p>e.g. 采用 LSD</p>
+
+<pre><code>input: [170, 45, 75, 90, 802, 24, 2, 66]
+
+1. 从最后一个关键字开始排：  
+   170, 45, 75, 90, 802, 24, 2, 66
+     0   5   5   0    2   4  2   6
+
+   排序后（注意保持原来的相对顺序，802 仍然在 2 前面）：
+   170, 90, 802, 2, 24, 45, 75, 66
+
+2. 从次要关键字开始排
+   170, 90, 802, 2, 24, 45, 75, 66
+    7   9    0      2   4   7   6
+
+   排序后（170 仍然在 75 前面）：
+   802, 2, 24, 45, 66, 170, 75, 90
+
+3. 从首要关键字开始排：
+   802, 2, 24, 45, 66, 170, 75, 90
+   8                   1
+
+   排序后：
+   2, 24, 45, 66, 75, 90, 170, 802
+
+output: [2, 24, 45, 66, 75, 90, 170, 802]
+</code></pre>
+
+<ul>
+<li>时间复杂度：</li>
+</ul>
+
+<p>平均 O(d * (r + n))</p>
+
+<p>d:digit 数字位数 r:radix 基数 n:number 关键字个数</p>
+
+<ul>
+<li><p>空间复杂度：
+O(r + n)</p></li>
+
+<li><p>是否稳定：
+是</p></li>
+</ul>
+
+<pre><code class="language-java">    public void radixSort(int[] arr, int n) {
+
+        // find max element
+        int max = 0;
+        for (int i = 1; i &lt; n; i++) {
+            if (arr[i] &gt; max)
+                max = arr[i];
+        }
+        for (int k = 1; max / k &gt; 0; k *= 10) {
+            countingSort(arr, n, k);
+        }
+    }
+
+    public void countingSort(int[] arr, int n, int k) {
+
+        // max number is 9
+        int C[] = new int[10];
+
+        // counting occurrences
+        for (int i = 0; i &lt; n; i++) {
+            C[(arr[i] / k) % 10]++;
+        }
+
+        // counting elements less than or equal to C[i]
+        for (int i = 1; i &lt; 10; i++) {
+            C[i] = C[i] + C[i - 1];
+        }
+
+        // insert into result array
+        int[] B = new int[n];
+        for (int i = n - 1; i &gt;= 0; i--) {
+            B[C[(arr[i] / k) % 10] - 1] = arr[i];
+            C[(arr[i] / k) % 10]--;
+        }
+
+        for (int i = 0; i &lt; n; i++) {
+            arr[i] = B[i];
+        }
+
+    }
+</code></pre>
+
+<h2 id="总结">总结</h2>
+
+<ul>
+<li><p>关于稳定性：</p>
+
+<ul>
+<li>稳定的排序算法：冒泡、插入、归并、计数、桶和基数排序<br /></li>
+<li>不稳定的排序算法: 选择、快速、希尔和堆排序</li>
+</ul></li>
+
+<li><p>排序算法的选择：</p>
+
+<ul>
+<li>如果数据有序或基本有序，冒泡和插入的时间复杂度可以降到 O(n)，而快排则相反。</li>
+<li>如果数据很大，需要考虑使用 O(nlgn) 的排序方法，如快排、归并排序、堆排。</li>
+<li>如果对空间限制不大，可以使用基数排序等方法降低时间复杂度，这些线性时间排序法是利用了数据的特性达到最佳的效果。</li>
+</ul></li>
+</ul>
+
+<hr />
+
+<p>参考资料：</p>
+
+<ul>
+<li><a href="https://www.byvoid.com/zhs/blog/sort-radix">https://www.byvoid.com/zhs/blog/sort-radix</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/%E6%A1%B6%E6%8E%92%E5%BA%8F">https://zh.wikipedia.org/wiki/%E6%A1%B6%E6%8E%92%E5%BA%8F</a></li>
+<li><a href="https://blog.csdn.net/hguisu/article/details/7776068#t8">https://blog.csdn.net/hguisu/article/details/7776068#t8</a></li>
+<li><a href="https://www.geeksforgeeks.org/radix-sort/">https://www.geeksforgeeks.org/radix-sort/</a></li>
+</ul>
+
+
+  
+<div class="prev-next-post pure-g">
+  <div class="pure-u-1-24" style="text-align: left;">
+    
+    <a href="https://shelbylee.github.io/post/2018/04/19/"><i class="fa fa-chevron-left"></i></a>
+    
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="prev">
+      <a href="https://shelbylee.github.io/post/2018/04/19/">关于 try 和 finally 中的 return</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-2-24">
+    &nbsp;
+  </div>
+  <div class="pure-u-10-24">
+    
+  </div>
+  <div class="pure-u-1-24" style="text-align: right;">
+    
+  </div>
+</div>
+
+
+
+  
+
+</div>
+
+</div>
+</div>
+<script src="https://shelbylee.github.io/js/ui.js"></script>
+
+</script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-103593285-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+
+
+</body>
+</html>
+
