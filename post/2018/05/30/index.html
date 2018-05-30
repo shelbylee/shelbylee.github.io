@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.38" />
+
+  <title>Java 容器学习之 HashMap &middot; Shelby Lee</title>
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
+
+  
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://shelbylee.github.io/css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://shelbylee.github.io/css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="https://shelbylee.github.io/css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+ 
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/zenburn.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  <link rel="shortcut icon" href="https://shelbylee.github.io/img/favicon.ico" type="image/x-icon" />
+
+  
+  
+
+  
+
+  
+</head>
+
+
+</head>
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="https://shelbylee.github.io/">Menu</a>
+
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/"><i class='fa fa-home fa-fw'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/post/"><i class='fa fa-list fa-fw'></i>Posts</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/about/"><i class='fa fa-user fa-fw'></i>About</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/contact/"><i class='fa fa-phone fa-fw'></i>Contact</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/topics/"><i class='fa fa-folder fa-fw'></i>Topics</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/tags/"><i class='fa fa-tags fa-fw'></i>Tags</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/shelbylee" target="_blank"><i class="fa fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small>&copy; 2018. All rights reserved.</small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>Java 容器学习之 HashMap</h1>
+  <h2></h2>
+</div>
+<div class="content">
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>30 May 2018, 18:27</time>
+  </div>
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-folder fa-fw"></i>
+    
+      <a class="post-taxonomy-topic" href="https://shelbylee.github.io/topics/java-%E5%9F%BA%E7%A1%80">Java 基础</a>
+    
+  </div>
+  
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-tags fa-fw"></i>
+    
+      <a class="post-taxonomy-tag" href="https://shelbylee.github.io/tags/2018-05">2018-05</a>
+    
+  </div>
+
+  
+  
+
+
+
+
+</div>
+
+
+
+  
+
+<h3 id="一-hashmap简介">一、HashMap简介</h3>
+
+<p>看一下官方文档中对HashMap的描述</p>
+
+<pre><code class="language-java"> * Hash table based implementation of the &lt;tt&gt;Map&lt;/tt&gt; interface.  This
+ * implementation provides all of the optional map operations, and permits
+ * &lt;tt&gt;null&lt;/tt&gt; values and the &lt;tt&gt;null&lt;/tt&gt; key.  (The &lt;tt&gt;HashMap&lt;/tt&gt;
+ * class is roughly equivalent to &lt;tt&gt;Hashtable&lt;/tt&gt;, except that it is
+ * unsynchronized and permits nulls.)  This class makes no guarantees as to
+ * the order of the map; in particular, it does not guarantee that the order
+ * will remain constant over time.
+</code></pre>
+
+<ul>
+<li>HashMap 是基于哈希表的 Map 接口的实现。</li>
+<li>允许使用 null 值和 null 键。</li>
+<li>除了不同步和允许使用 null 之外，HashMap 类与 Hashtable 大致相同。</li>
+<li>不保证顺序</li>
+<li>不保证该顺序恒久不变。</li>
+</ul>
+
+<p>HashMap 底层的数据结构就是数组+链表+红黑树，红黑树是在 JDK 1.8 中加进来的。尤其是在 JDK 1.8 对它优化以后，HashMap 变成了一个更强的容器&hellip;嗯&hellip;真的很强。</p>
+
+<p>当新建一个 HashMap 时，就会初始化一个数组。在这个数组中，存放的是 Node 类，它拥有指向单独的一个链表的头结点的引用，这个链表是用来解决 hash 冲突的（如果不同的 key 被映射到数组中同一位置的话，就将其放入链表中，从而解决冲突）。</p>
+
+<pre><code class="language-java">大概就是这样子... ⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄
+
+数组
+ __
+|__|     链表
+ __       __    __    __    __    
+|__|---&gt; |__|-&gt;|__|-&gt;|__|-&gt;|__|-&gt;...
+ __
+|__|
+ __
+|__|
+ __
+|__|
+
+           __
+          |__| : Node&lt;K, V&gt;
+</code></pre>
+
+<p>但是，在 JDK 1.8 之前的这种做法，即使负载因子和 Hash 算法设计的再合理，也无法避免会出现链表过长的情况， 一旦链表过长，会严重影响 HashMap 的性能，所以，在 JDK 1.8 之后，使用了红黑树这个数据结构，当链表长度大于 8 时，该链表就会转化成红黑树，利用红黑树快速增删查改的特点提高 HashMap 的性能。</p>
+
+<p>因为 HashMap 是不同步的，如果需要考虑线程安全，需要使用 ConcurrentHashMap，或者可以使用 Collections.synchronizedMap() 方法返回被指定 map 支持的同步的 map。</p>
+
+<pre><code class="language-java">Map&lt;Integer, Integer&gt; map = Collections.synchronizedMap(new HashMap&lt;&gt;());
+</code></pre>
+
+<h3 id="二-源码分析-基于jdk1-8">二、源码分析（基于JDK1.8）</h3>
+
+<h4 id="1-成员变量">1. 成员变量</h4>
+
+<pre><code class="language-java">// 默认初始容量是16，必须是2的幂  
+static final int DEFAULT_INITIAL_CAPACITY = 1 &lt;&lt; 4; // aka 16  
+  
+// 最大容量（必须是2的幂且小于2的30次方，传入容量过大会被这个值替换）  
+static final int MAXIMUM_CAPACITY = 1 &lt;&lt; 30;  
+  
+// 默认加载因子，加载因子就是指哈希表在其容量自动增加之前可以达到多满的一种尺度  
+static final float DEFAULT_LOAD_FACTOR = 0.75f;  
+
+// 默认的转换成红黑树的阈值，即链表长度达到该值时，该链表将转换成红黑树
+static final int TREEIFY_THRESHOLD = 8;
+  
+// 存储Entry的默认空数组  
+static final Entry&lt;?,?&gt;[] EMPTY_TABLE = {};  
+  
+// 存储Entry的数组，长度为2的幂。HashMap采用拉链法实现的，
+// 每个Entry的本质是个单向链表  
+transient Entry&lt;K,V&gt;[] table = (Entry&lt;K,V&gt;[]) EMPTY_TABLE;  
+  
+// HashMap的大小，即HashMap中实际存在的键值对数量 
+transient int size;  
+  
+// 阈值，表示所能容纳的key-value对的极限，用于判断是否需要调整HashMap的容量
+// 如果 table 还是空的，那么这个阈值就是 0 或者是默认的容量 16
+int threshold;  
+  
+// 加载因子实际大小  
+final float loadFactor;  
+  
+// HashMap被修改的次数，用于 fail-fast 机制  
+transient int modCount;  
+</code></pre>
+
+<p>其中需要特别注意的是capacity和load factor这两个属性
+官方文档中对其描述是：</p>
+
+<pre><code> The capacity is the number of buckets in the hash table, and the initial capacity is simply the capacity at the time the hash table is created. 
+
+ The load factor is a measure of how full the hash table is allowed to get before its capacity is automatically increased. 
+</code></pre>
+
+<ul>
+<li>capacity（容量）：就是buckets的数目。</li>
+<li>load factor（负载因子）：哈希表中的填满程度。
+
+<ul>
+<li>若加载因子设置过大，则填满的元素越多，从而提高了空间利用率，但是冲突的机会增加了，冲突的越多，链表就会变得越长，那么查找效率就会变低；</li>
+<li>若加载因子设置过小，则填满的元素越少，那么空间利用率就会降低，表中数据将变得更加稀疏，但是冲突的机会减小了，这样链表就不会太长，查找效率就会变高。</li>
+<li>一般，如果机器内存足够，想增加查找速度，可以将load factor设小一点；相反，如果内存不足，并且对查找速度要求不高，可以将load factor设大一点。</li>
+</ul></li>
+</ul>
+
+<h4 id="2-静态内部类-node">2. 静态内部类 Node</h4>
+
+<p>Node 实际上就是一个单链表，它实现了Map.Entry接口，其中next也是一个Node对象，用来处理hash冲突，形成一个链表。</p>
+
+<pre><code class="language-java">    static class Node&lt;K,V&gt; implements Map.Entry&lt;K,V&gt; {
+        final int hash;
+        final K key;
+        V value;
+        Node&lt;K,V&gt; next; // 指向下一个节点
+
+        Node(int hash, K key, V value, Node&lt;K,V&gt; next) {
+            this.hash = hash;
+            this.key = key;
+            this.value = value;
+            this.next = next;
+        }
+
+        public final K getKey()        { return key; }
+        public final V getValue()      { return value; }
+        public final String toString() { return key + &quot;=&quot; + value; }
+
+        public final int hashCode() {
+            return Objects.hashCode(key) ^ Objects.hashCode(value);
+        }
+
+        public final V setValue(V newValue) {
+            V oldValue = value;
+            value = newValue;
+            return oldValue;
+        }
+
+        // 判断两个node是否equal（必须key和value都相等）
+        public final boolean equals(Object o) {
+            if (o == this)
+                return true;
+            if (o instanceof Map.Entry) {
+                Map.Entry&lt;?,?&gt; e = (Map.Entry&lt;?,?&gt;)o;
+                if (Objects.equals(key, e.getKey()) &amp;&amp;
+                    Objects.equals(value, e.getValue()))
+                    return true;
+            }
+            return false;
+        }
+    }
+</code></pre>
+
+<h4 id="3-构造函数">3. 构造函数</h4>
+
+<p>HashMap 有四个构造函数</p>
+
+<pre><code class="language-java">    /**
+    用指定的初始容量和负载因子创建HashMap
+     */
+    public HashMap(int initialCapacity, float loadFactor) {
+        if (initialCapacity &lt; 0)
+            throw new IllegalArgumentException(&quot;Illegal initial capacity: &quot; +
+                                               initialCapacity);
+        if (initialCapacity &gt; MAXIMUM_CAPACITY)
+            initialCapacity = MAXIMUM_CAPACITY;
+        if (loadFactor &lt;= 0 || Float.isNaN(loadFactor))
+            throw new IllegalArgumentException(&quot;Illegal load factor: &quot; +
+                                               loadFactor);
+        this.loadFactor = loadFactor;
+        this.threshold = tableSizeFor(initialCapacity);
+    }
+
+    /**
+    用指定的容量创建HashMap，负载因子为默认的0.75
+     */
+    public HashMap(int initialCapacity) {
+        this(initialCapacity, DEFAULT_LOAD_FACTOR);
+    }
+
+    /**
+    均使用默认值(初始容量：16 默认负载因子：0.75)
+     */
+    public HashMap() {
+        this.loadFactor = DEFAULT_LOAD_FACTOR; // all other fields defaulted
+    }
+
+    /**
+     用指定的一个 map 构造一个新HashMap
+     新的 HashMap 的负载因子为默认值 0.75，容量为足以装载该 map 的容量，会在 putMapEntries 中设置
+     */
+    public HashMap(Map&lt;? extends K, ? extends V&gt; m) {
+        this.loadFactor = DEFAULT_LOAD_FACTOR;
+        putMapEntries(m, false);
+    }
+</code></pre>
+
+<h4 id="4-确定哈希桶数组索引的位置">4. 确定哈希桶数组索引的位置</h4>
+
+<p>确定位置这部分是很重要的，无论增删查键值对，首先都要定位到哈希桶数组的位置！理想的情况就是数组中每个位置都只有一个元素，这样在用算法求得这个位置后，我们就能直接命中该元素，不用再遍历链表了，这样可以极大地优化查找的效率.</p>
+
+<p>在源码中，采用的方法就是先根据 hashCode 先计算出 hash 值，然后根据 hash 值再求得索引，从而找到位置。</p>
+
+<p>求hash值</p>
+
+<pre><code class="language-java">    static final int hash(Object key) {
+        int h;
+        return (key == null) ? 0 : (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16);
+    }
+</code></pre>
+
+<p>（&rdquo;&gt;&gt;&gt;&ldquo;为按位右移补零操作符。左操作数的值按右操作数指定的位数右移，移动得到的空位以零填充。）</p>
+
+<p>hash 值的计算主要分三步：
+1. 取key的hashCode值
+2. 高位运算
+3. 对1、2进行异或运算得到hash值</p>
+
+<p>计算索引</p>
+
+<pre><code class="language-java">// 此处取的put方法片段，这里就是用(n - 1) &amp; hash 计算的索引（n为表的长度）
+ if ((p = tab[i = (n - 1) &amp; hash]) == null)
+</code></pre>
+
+<p>计算方法其实就是取模运算。</p>
+
+<p>对于计算索引的取模运算，是一个非常非常巧妙的运算~ ヽ(✿ﾟ▽ﾟ)ノ</p>
+
+<p>它是用 hash &amp; (n - 1) 得到索引值，因为 HashMap 底层数组的长度总是 2 的 n 次方（这是 HashMap 在速度上的优化），通过下面这个函数去保证 table 的长度为 2 的次幂。</p>
+
+<pre><code class="language-java">    // 这个静态函数的作用就是返回一个比 cap 大但是又最接近 cap 的 2 次幂的整数
+    // 原理就是通过不断地 位或 和 按位右移补零 操作，
+    // 将 n 变成 0..0111..111 这种形式，最后 + 1，就变成了 2 的次幂
+    static final int tableSizeFor(int cap) {
+        int n = cap - 1;
+        n |= n &gt;&gt;&gt; 1;
+        n |= n &gt;&gt;&gt; 2;
+        n |= n &gt;&gt;&gt; 4;
+        n |= n &gt;&gt;&gt; 8;
+        n |= n &gt;&gt;&gt; 16;
+        return (n &lt; 0) ? 1 : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
+    }
+</code></pre>
+
+<p>有了这个前提： n 一定为 2 的 n 次方，那么这个表达式才能等价于 hash % n，为什么不直接用 hash % n 呢？因为 &amp; 比 % 具有更高的效率呀，所以采用的是 hash &amp; (n - 1) 而不是 hash % n。</p>
+
+<p>那么为什么n 为 2 的 n 次方时 hash &amp; (n - 1) 可以等价于对 n 取模呢？</p>
+
+<p>我是这样想的</p>
+
+<ul>
+<li>首先，n，即链表长度，为 2 的 n 次方，那么 n 就可以表示成 100&hellip;00 的这种样子，那么 n - 1 就是 01111&hellip;11。
+
+<ul>
+<li>如果 hash &lt; n，&amp; 后都是 hash 本身。</li>
+<li>如果 hash = n，&amp; 后结果为 0。</li>
+<li>如果 hash &gt; n，&amp; 过后相当于 hash - k*n，即 hash % n。</li>
+</ul></li>
+<li>其次，因为 n 为 2 的次幂，是偶数，偶数最后一位是 0，而 n - 1 肯定是奇数，奇数的最后一位是 1，这样便保证了 hash &amp; (n - 1) 的最后一位可能为 0 也可能为 1，这样便可以保证散列的均匀性，即均匀分布在数组 table 中；而如果 n 为奇数，则 n - 1 肯定是偶数，那么它的最后一位肯定是 0，这样 hash &amp; (n - 1) 得到的结果的最后一位肯定是 0，即只能为偶数，这样任何 hash 值都会被映射到数组的偶数下标位置上，这就浪费了近一半的空间！</li>
+</ul>
+
+<p>因此，HashMap 的作者要求链表的长度必须为 2 的整数次幂，应该就是为了这样能使不同 hash 值发生碰撞的概率较小，让元素在哈希表中均匀的散列。</p>
+
+<h4 id="5-put方法源码分析">5. put方法源码分析</h4>
+
+<p>put的过程大致是：
+- 根据key计算hash值
+- 判断tab是否为空，若为空则进行resize()扩容
+- 根据hash值计算出索引
+- 如果没有碰撞就直接放入
+- 如果有碰撞，就先放到链表里
+- 若链表长度超过8（默认的TREEIFY_THRESHOLD），则转换成红黑树再放
+- 如果key已经存在，就覆盖其oldValue
+- 插入成功后，如果size &gt; threshold，就要扩容</p>
+
+<pre><code class="language-java">    public V put(K key, V value) {
+        // 计算hash值
+        return putVal(hash(key), key, value, false, true);
+    }
+
+    final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
+                   boolean evict) {
+
+        // tab为哈希表数组，p为我们要找的那个插入位置的节点
+        Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; int n, i;
+
+        // 若tab为空，就创建一个（进行扩容操作）
+        if ((tab = table) == null || (n = tab.length) == 0)
+            n = (tab = resize()).length;
+
+        //根据key计算hash值并处理后得到索引，如果表的这个位置为空，则直接插入
+        if ((p = tab[i = (n - 1) &amp; hash]) == null)
+            tab[i] = newNode(hash, key, value, null);
+        // 如果不为空
+        else {
+            Node&lt;K,V&gt; e; K k;
+            // 判断key是否存在，如果存在，则直接覆盖其value
+            if (p.hash == hash &amp;&amp;
+                ((k = p.key) == key || (key != null &amp;&amp; key.equals(k))))
+                e = p;
+            // 判断该链表是否为TreeNode，如果是，红黑树直接插入键值对
+            else if (p instanceof TreeNode)
+                e = ((TreeNode&lt;K,V&gt;)p).putTreeVal(this, tab, hash, key, value);
+            // 如果不是，则遍历链表，然后插入
+            else {
+                for (int binCount = 0; ; ++binCount) {
+                    if ((e = p.next) == null) {
+                        p.next = newNode(hash, key, value, null);
+                        // 链表长度大于8，则转换成红黑树，并插入键值对
+                        if (binCount &gt;= TREEIFY_THRESHOLD - 1) // -1 for 1st
+                            treeifyBin(tab, hash);
+                        break;
+                    }
+                    if (e.hash == hash &amp;&amp;
+                        ((k = e.key) == key || (key != null &amp;&amp; key.equals(k))))
+                        break;
+                    p = e;
+                }
+            }
+            // 插入
+            if (e != null) { // existing mapping for key
+                V oldValue = e.value;
+                if (!onlyIfAbsent || oldValue == null)
+                    e.value = value;
+                afterNodeAccess(e);
+                return oldValue;
+            }
+        }
+        ++modCount;
+        // 如果超过阈值，则进行扩容
+        if (++size &gt; threshold)
+            resize();
+        afterNodeInsertion(evict);
+        return null;
+    }
+</code></pre>
+
+<h4 id="6-get方法源码分析">6. get方法源码分析</h4>
+
+<p>get方法和put方法过程类似</p>
+
+<pre><code class="language-java">    public V get(Object key) {
+        Node&lt;K,V&gt; e;
+
+        // 计算hash值
+        return (e = getNode(hash(key), key)) == null ? null : e.value;
+    }
+
+    final Node&lt;K,V&gt; getNode(int hash, Object key) {
+        Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; first, e; int n; K k;
+
+        // 如果表非空，并且根据计算出的索引值对应的值非空
+        if ((tab = table) != null &amp;&amp; (n = tab.length) &gt; 0 &amp;&amp;
+            (first = tab[(n - 1) &amp; hash]) != null) {
+                // 直接命中
+            if (first.hash == hash &amp;&amp; // always check first node
+                ((k = first.key) == key || (key != null &amp;&amp; key.equals(k))))
+                return first;
+                // 未直接命中
+            if ((e = first.next) != null) {
+                // 在红黑树中get
+                if (first instanceof TreeNode)
+                    return ((TreeNode&lt;K,V&gt;)first).getTreeNode(hash, key);
+                    // 在链表中get
+                do {
+                    if (e.hash == hash &amp;&amp;
+                        ((k = e.key) == key || (key != null &amp;&amp; key.equals(k))))
+                        return e;
+                } while ((e = e.next) != null);
+            }
+        }
+        return null;
+    }
+</code></pre>
+
+<h4 id="7-resize-的扩容机制">7. resize() 的扩容机制</h4>
+
+<ul>
+<li><p>为什么要进行 resize?</p>
+
+<ul>
+<li>假设 table 的长度为 n，总共需要放入 HashMap 的键值对数量为 m，那么，大约每条链表的长度就是 m / n，查找的时间复杂度也就是 O(m / n)，显然，如果要尽量降低时间复杂度，需要加大 n，也就是对 table 扩容。</li>
+</ul></li>
+
+<li><p>什么时候进行resize?</p>
+
+<ul>
+<li>在 put 过程中，如果发现当前 HashMap 的 size 已经超过了 load factor 希望占的比例，那么就会进行 resize 操作。</li>
+</ul></li>
+</ul>
+
+<p>下面是对 resize 源码的分析，这段我觉得是最艰难的一段。。这还跳过了红黑树 <em>:(´□`」 ∠):</em></p>
+
+<pre><code class="language-java">    final Node&lt;K,V&gt;[] resize() {
+        Node&lt;K,V&gt;[] oldTab = table;
+        int oldCap = (oldTab == null) ? 0 : oldTab.length;
+        int oldThr = threshold;
+        int newCap, newThr = 0;
+        if (oldCap &gt; 0) {
+            // 如果超过最大值就不再扩容了
+            if (oldCap &gt;= MAXIMUM_CAPACITY) {
+                threshold = Integer.MAX_VALUE;
+                return oldTab;
+            }
+            // 如果没超过最大值，并且假设容量 double 后也不超过最大值，
+            // 那就扩容为原来的 2 倍，
+            // 然后再看原来的容量是不是还够
+            // 如果不够了，阈值再 double，否则只是扩容，不改变阈值
+            else if ((newCap = oldCap &lt;&lt; 1) &lt; MAXIMUM_CAPACITY &amp;&amp;
+                     oldCap &gt;= DEFAULT_INITIAL_CAPACITY)
+                newThr = oldThr &lt;&lt; 1; // double threshold
+        }
+        // 从阈值中取出 resize 应该扩容的值
+        else if (oldThr &gt; 0) // initial capacity was placed in threshold
+            newCap = oldThr;
+        // oldCap = 0
+        else {               // zero initial threshold signifies using defaults
+            newCap = DEFAULT_INITIAL_CAPACITY;
+            newThr = (int)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);
+        }
+        // 计算新的阈值
+        if (newThr == 0) {
+            float ft = (float)newCap * loadFactor;
+            newThr = (newCap &lt; MAXIMUM_CAPACITY &amp;&amp; ft &lt; (float)MAXIMUM_CAPACITY ?
+                      (int)ft : Integer.MAX_VALUE);
+        }
+        threshold = newThr;
+        // 创建一个新的 table
+        @SuppressWarnings({&quot;rawtypes&quot;,&quot;unchecked&quot;})
+            Node&lt;K,V&gt;[] newTab = (Node&lt;K,V&gt;[])new Node[newCap];
+        // 指向新的 table
+        table = newTab;
+        if (oldTab != null) {
+            // 把每个bucket都移动到新的buckets中
+            for (int j = 0; j &lt; oldCap; ++j) {
+                Node&lt;K,V&gt; e;
+                if ((e = oldTab[j]) != null) {
+                    // 删除
+                    oldTab[j] = null;
+                    // 如果当前结点是尾结点
+                    if (e.next == null)
+                        // 重新计算索引值，然后放入元素
+                        newTab[e.hash &amp; (newCap - 1)] = e;
+                    // 如果当前结点已经转换成红黑树了
+                    else if (e instanceof TreeNode)
+                        // 将树上的结点 rehash，然后放到新位置，红黑树这块以后在分析
+                        ((TreeNode&lt;K,V&gt;)e).split(this, newTab, j, oldCap);
+                    else { // preserve order
+                        // 进行链表复制
+                        // lo链的新索引值和以前相同
+                        // hi链的新索引值为：原索引值 + oldCap 
+                        Node&lt;K,V&gt; loHead = null, loTail = null;
+                        Node&lt;K,V&gt; hiHead = null, hiTail = null;
+                        Node&lt;K,V&gt; next;
+                        do {
+                            next = e.next;
+                            /**
+                            (e.hash &amp; oldCap) == 0 这个地方比较难理解，但也是扩容最关键的地方
+
+                            假设现在 (e.hash &amp; oldCap) == 0 为 true
+
+                            oldCap 和 new Cap 肯定都是 2 的次幂，也就是 100... 这种形式，那么假如现在 oldCap = 16，
+
+                            那么原索引为 
+                            e.hash &amp; (oldCap - 1) = e.hash &amp; 01111 --&gt; index ①
+                            新的索引为
+                            e.hash &amp; (newCap - 1) = e.hash &amp; 11111
+
+                            同时我们已知 e.hash &amp; oldCap = 0，
+                            即 e.hash &amp; 10000 = 0 ②
+
+                            通过 ① ② 就可以推出
+                            e.hash &amp; 11111 --&gt; index 
+                            即索引位置不变
+                            */
+                            if ((e.hash &amp; oldCap) == 0) {
+                                if (loTail == null)
+                                    loHead = e;
+                                else
+                                    loTail.next = e;
+                                loTail = e;
+                            }
+                            else {
+                                if (hiTail == null)
+                                    hiHead = e;
+                                else
+                                    hiTail.next = e;
+                                hiTail = e;
+                            }
+                        } while ((e = next) != null);
+                        if (loTail != null) {
+                            loTail.next = null;
+                            newTab[j] = loHead;
+                        }
+                        if (hiTail != null) {
+                            hiTail.next = null;
+                            newTab[j + oldCap] = hiHead;
+                        }
+                    }
+                }
+            }
+        }
+        return newTab;
+    }
+</code></pre>
+
+<p>扩容部分完结撒花 <em>★,°</em>:.☆(￣▽￣)/$:<em>.°★</em></p>
+
+<h3 id="三-关于-hashmap-的线程安全性">三、关于 HashMap 的线程安全性</h3>
+
+<p>HashMap 不是线程安全的，它在被设计的时候就没有考虑线程安全，因为这本来就不是一个并发容器，相应的并发容器是 ConcurrentHashMap，那么，HashMap 的线程不安全性主要体现在哪儿呢？</p>
+
+<p>最著名的一个就是高并发环境下的死循环问题，具体是在 resize 时产生的。</p>
+
+<p>这种死循环产生的主要原因是因为 1.7 的 resize 中，新的 table 采用的插入方式是队头插入（LIFO，后进先出），比如元素为 {3,5,7,9}，插入后就是 {9,7,5,9}，会将链表顺序逆置，它这样做主要是为了防止遍历链表尾部，因为 resize 本来就是创建了一个新的 table，所以对于元素的顺序不关心，因此采用队头插入的方式，如果是正常的从尾部插入的话，还需要先找到尾部的位置，增加了遍历的消耗，而 resize 又正好不在乎元素顺序，所以就使用的队头插入的方式。</p>
+
+<p>但是这种方式带来了一个问题，就是死循环，具体死循环怎么产生的我就不赘述了，因为网上有很多关于这个的具体分析，我要说的是，在 JDK 1.8 中，HashMap 除了加入了红黑树这个数据结构外还有一些其他的调整，在 resize 时对链表的操作，变成了两对指针分别对 lo链 和 hi链 操作。</p>
+
+<pre><code>                        Node&lt;K,V&gt; loHead = null, loTail = null;
+                        Node&lt;K,V&gt; hiHead = null, hiTail = null;          
+</code></pre>
+
+<p>因为增加了xxTail指针，所以可以随时找到尾部，避免遍历尾部，因此可以直接在尾部插入，因而避免了死循环问题。</p>
+
+<p>不过这不代表 JDK 1.8 的HashMap就是线程安全了的，因为很明显还存在比如并发时元素的覆盖之类的问题，所以多线程环境下还是建议使用 ConcurrentHashMap 或者进行同步操作。</p>
+
+
+  
+<div class="prev-next-post pure-g">
+  <div class="pure-u-1-24" style="text-align: left;">
+    
+    <a href="https://shelbylee.github.io/post/2018/05/29/"><i class="fa fa-chevron-left"></i></a>
+    
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="prev">
+      <a href="https://shelbylee.github.io/post/2018/05/29/">排序算法总结</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-2-24">
+    &nbsp;
+  </div>
+  <div class="pure-u-10-24">
+    
+  </div>
+  <div class="pure-u-1-24" style="text-align: right;">
+    
+  </div>
+</div>
+
+
+
+  
+
+</div>
+
+</div>
+</div>
+<script src="https://shelbylee.github.io/js/ui.js"></script>
+
+</script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-103593285-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+
+
+</body>
+</html>
+
