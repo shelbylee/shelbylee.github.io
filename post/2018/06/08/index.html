@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.38" />
+
+  <title>关于 static final method 的疑惑 &middot; Shelby Lee</title>
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
+
+  
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://shelbylee.github.io/css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://shelbylee.github.io/css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="https://shelbylee.github.io/css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+ 
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/zenburn.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  <link rel="shortcut icon" href="https://shelbylee.github.io/img/favicon.ico" type="image/x-icon" />
+
+  
+  
+
+  
+
+  
+</head>
+
+
+</head>
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="https://shelbylee.github.io/">Menu</a>
+
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/"><i class='fa fa-home fa-fw'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/post/"><i class='fa fa-list fa-fw'></i>Posts</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/about/"><i class='fa fa-user fa-fw'></i>About</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/contact/"><i class='fa fa-phone fa-fw'></i>Contact</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/topics/"><i class='fa fa-folder fa-fw'></i>Topics</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="https://shelbylee.github.io/tags/"><i class='fa fa-tags fa-fw'></i>Tags</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/shelbylee" target="_blank"><i class="fa fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small>&copy; 2018. All rights reserved.</small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>关于 static final method 的疑惑</h1>
+  <h2></h2>
+</div>
+<div class="content">
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>08 Jun 2018, 23:01</time>
+  </div>
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-folder fa-fw"></i>
+    
+      <a class="post-taxonomy-topic" href="https://shelbylee.github.io/topics/java-%E5%9F%BA%E7%A1%80">java-基础</a>
+    
+  </div>
+  
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-tags fa-fw"></i>
+    
+      <a class="post-taxonomy-tag" href="https://shelbylee.github.io/tags/2018-06">2018-06</a>
+    
+  </div>
+
+  
+  
+
+
+
+
+</div>
+
+
+
+  
+
+<h2 id="前言">前言</h2>
+
+<p>在声明一个方法为 static final 时，IDEA 给出了一个 warning：</p>
+
+<blockquote>
+<p>When a static method is overriden in a subclass it can still be accessed via the superclass making the final declaration not very necessary. Declaring a static method final does prevent subclasses from defining a static method with the same signature.</p>
+</blockquote>
+
+<p>翻译过来大概是：将一个 static 方法声明为 final 不是非常必要的，因为即使声明为 final，这个 static 方法在子类中被 override 后，仍然可以通过父类访问这个方法。不过被声明为 final 确实可以阻止子类定义一个相同签名的 static 方法。</p>
+
+<p>看来看去我还是觉得很奇怪，可能是因为英语的表达和我中文的思维不太一样?&hellip;</p>
+
+<p>反正 static 真是 Java 的一个很让人迷惑的 feature =.=</p>
+
+<p>还是要好好弄懂它。</p>
+
+<h3 id="static-final-方法">static final 方法</h3>
+
+<p>首先，对于 static 方法，我们知道它是属于类的，而非对象，可以认为 static 方法是没有 this 隐式参数的，因此可以使用类名直接调用 static 方法，通常，在一些工具类中将方法声明为 static 使用起来会比较方便。</p>
+
+<p>当然，通过对象也可以调用 static 方法，但是并不推荐这么做，因为通常一个方法被声明为 static 有两种原因：1. 这个方法不需要访问对象的状态 2. 这个方法只需要访问类的 static 域，所以如果是因为第一个原因声明的 static 方法，再用对象调用它时，容易造成混淆，因为这个对象可能和这个 static 方法毫无关系。</p>
+
+<p>还有一点就是，static 方法是不能被 override 的</p>
+
+<pre><code class="language-java">class SuperClass {
+    public static void staticMethod() {
+        System.out.println(&quot;static method in super class&quot;);
+    }
+}
+
+class SubClass extends SuperClass {
+    public static void staticMethod() {
+        System.out.println(&quot;static method in sub class&quot;);
+    }
+
+    public static void main(String[] args) {
+        staticMethod();
+    }
+}
+</code></pre>
+
+<p>这时会发现可以成功的调用 staticMethod()，并且输出： static method in sub class，说明调用的是子类中这个方法，那么为什么说 static 方法是不能被 override 的呢？</p>
+
+<p>看下面的改动：</p>
+
+<pre><code class="language-java">class SubClass extends SuperClass {
+    @Override
+    public static void staticMethod() {
+        System.out.println(&quot;static method in sub class&quot;);
+    }
+
+    public static void main(String[] args) {
+        staticMethod();
+    }
+}
+</code></pre>
+
+<p>当我们加上 @Override 注释时就会发现编译时就报错了：SubClass.java:2: 错误: 方法不会覆盖或实现超类型的方法，这就说明在子类中的这个 staticMethod 实际上不是对父类方法的 override，而是一个普普通通的子类中的方法，仅此而已。</p>
+
+<p>为什么不能 override static 方法呢？我是这样理解的，因为 static 是和类关联的，所以无关对象状态，而 override 是多态的表现，多态是针对对象而言的，因此 static 方法是不能被 override 的。</p>
+
+<p>这也给我们提了个醒，想要覆盖父类方法时最好加上 @Override 注释，因为它会帮助我们鉴别是否真的 override 了父类的方法~</p>
+
+<p>下面，如果我们为这个方法加上 final 呢？</p>
+
+<pre><code class="language-java">class SuperClass {
+    public static final void staticMethod() {
+        System.out.println(&quot;static method in super class&quot;);
+    }
+}
+
+class SubClass extends SuperClass {
+    //@Override
+    public static void staticMethod() {
+        System.out.println(&quot;static method in sub class&quot;);
+    }
+
+    public static void main(String[] args) {
+        staticMethod();
+    }
+}
+</code></pre>
+
+<p>这时，即使注释掉 @Override，编译也会报错，错误信息是：SubClass 中的 staticMethod() 无法覆盖 SuperClass 中的 staticMethod()，从这里就可以说明 IDEA 给出的那个 warning 的下半句了</p>
+
+<blockquote>
+<p>Declaring a static method final does prevent subclasses from defining a static method with the same signature.</p>
+</blockquote>
+
+<p>被声明为 final 的 static 方法的确可以阻止子类定义一个相同签名的 static 方法。</p>
+
+<p>在 Stack OverFlow 有一个类似的问题</p>
+
+<p><a href="https://stackoverflow.com/questions/1743715/behaviour-of-final-static-method">Behaviour of final static method</a></p>
+
+<p>作者的疑问是，本来 static 方法就是不能被 override 的，为什么在父类中加了 final 修饰符之后编译器还会报错。</p>
+
+<p>高票的解释是</p>
+
+<blockquote>
+<p>Static methods cannot be overridden but they can be hidden. The ts() method of B is not overriding(not subject to polymorphism) the ts() of A but it will hide it. If you call ts() in B (NOT A.ts() or B.ts() &hellip; just ts()), the one of B will be called and not A. Since this is not subjected to polymorphism, the call ts() in A will never be redirected to the one in B.</p>
+
+<p>The keyword final will disable the method from being hidden. So they cannot be hidden and an attempt to do so will result in a compiler error.</p>
+</blockquote>
+
+<p>大概意思是： static 方法不能被 override 但是可以被 hide，子类中的 static 方法不是在 override 而是在隐藏，也就是说，如果在子类中直接调用该静态方法（不是通过类调用），那么调用的一定是子类自己的那个方法，而不是父类中的，因为子类把父类那个隐藏起来了。而 final 会阻止隐藏，所以在子类中父类的 static 方法 被隐藏 就和 final 的 阻止隐藏 冲突了，因此编译就会报错。</p>
+
+<p>所以，本身在父类中声明为 static 的方法，在子类中确实不可以 override，并且子类会隐藏掉父类中的这个 static 方法，让自己的这个方法和父类的那个同名方法变成两个无关联的普通方法。如果在父类中的这个 static 方法加上了 final，那么子类中就不可以定义重名的方法了，因为子类的隐藏和 final 的阻止隐藏会发生冲突。</p>
+
+<p>so，我觉得将父类的 static 方法声明为 final 还是有作用的，至少不会让子类定义一个让人迷惑的重名方法了嘛，所以最后还是取消了这个 warning 啦。</p>
+
+
+  
+<div class="prev-next-post pure-g">
+  <div class="pure-u-1-24" style="text-align: left;">
+    
+    <a href="https://shelbylee.github.io/post/2018/06/052/"><i class="fa fa-chevron-left"></i></a>
+    
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="prev">
+      <a href="https://shelbylee.github.io/post/2018/06/052/">并发基础（二）</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-2-24">
+    &nbsp;
+  </div>
+  <div class="pure-u-10-24">
+    
+  </div>
+  <div class="pure-u-1-24" style="text-align: right;">
+    
+  </div>
+</div>
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'shelbylee';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+</div>
+
+</div>
+</div>
+<script src="https://shelbylee.github.io/js/ui.js"></script>
+
+</script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-103593285-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+
+
+</body>
+</html>
+
