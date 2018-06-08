@@ -539,11 +539,10 @@ O(n)</p></li>
 
         int n = arr.length;
         int i = n - 1;
-        int pos = 0;
 
         while (i &gt; 0) {
+            int pos = 0;
             for (int j = 0; j &lt; i; j++) {
-                pos = 0;
                 if (arr[j] &gt; arr[j + 1]) {
                     swap(arr, j, j + 1);
                     pos = j;
